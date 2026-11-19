@@ -1,0 +1,2136 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PRIVATE PARTS — Ravenclaw</title>
+  <meta name="description" content="A prism for the things said after midnight. An interactive scrollytelling film & archive refracted by Ravenclaw." />
+  <meta name="theme-color" content="#110f12" />
+
+  <!-- Expressive Editorial & Monospace Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['"Instrument Serif"', 'Georgia', 'serif'],
+            sans: ['"Space Grotesk"', 'system-ui', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            obsidian: '#110f12',
+            darkroom: '#1a161c',
+            alabaster: '#f4efe6',
+            stoneMuted: '#9e96a3',
+            prismCyan: '#38bdf8',
+            prismViolet: '#a855f7',
+            prismRose: '#f43f5e',
+            prismVermilion: '#fc4109',
+            prismAmber: '#f59e0b',
+          },
+        },
+      },
+    };
+  </script>
+
+  <!-- Minimal Essential Styles for Optical Grain, Spectrum Gradients, & Zero-FOUC Transition -->
+  <style>
+    :root {
+      --prism-gradient: linear-gradient(90deg, #38bdf8 0%, #a855f7 26%, #f43f5e 52%, #fc4109 76%, #f59e0b 100%);
+      --heat-color: #38bdf8;
+    }
+
+    html, body {
+      background-color: #110f12;
+      color: #f4efe6;
+      overscroll-behavior-y: none;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Zero-FOUC Preloader State */
+    body.is-loading #stage,
+    body.is-loading header.hud,
+    body.is-loading #progress-wrap {
+      opacity: 0;
+    }
+    #stage, header.hud, #progress-wrap {
+      transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    /* Subtle Animated SVG Film Grain Overlay */
+    .film-grain {
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+      animation: grainShift 0.6s steps(4) infinite;
+    }
+    @keyframes grainShift {
+      0% { transform: translate(0, 0); }
+      25% { transform: translate(-1.5%, 1%); }
+      50% { transform: translate(1%, -1.5%); }
+      75% { transform: translate(-1%, -1%); }
+      100% { transform: translate(0, 0); }
+    }
+
+    /* Prismatic Text & Hairline Helpers */
+    .prism-text {
+      background: var(--prism-gradient);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .prism-bar {
+      background: var(--prism-gradient);
+    }
+    .prism-dot-pulse {
+      background: var(--prism-gradient);
+      background-size: 200% 200%;
+      animation: prismFlow 3.5s ease infinite;
+    }
+    @keyframes prismFlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Scroll Cue Pulse */
+    @keyframes scrollDrop {
+      0% { transform: scaleY(0); transform-origin: top; opacity: 0; }
+      35% { transform: scaleY(1); transform-origin: top; opacity: 1; }
+      70% { transform: scaleY(1); transform-origin: bottom; opacity: 1; }
+      100% { transform: scaleY(0); transform-origin: bottom; opacity: 0; }
+    }
+    .scroll-line-anim {
+      animation: scrollDrop 2.2s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+    }
+
+    /* Custom Dark Scrollbar for Modals & Read Mode */
+    .custom-scroll::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.03);
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: rgba(244, 239, 230, 0.18);
+      border-radius: 999px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb:hover {
+      background: rgba(244, 239, 230, 0.35);
+    }
+
+    /* Hide native page scrollbar in cinema mode for clean full-bleed film aesthetic */
+    body.cinema-mode::-webkit-scrollbar {
+      width: 4px;
+    }
+    body.cinema-mode::-webkit-scrollbar-track {
+      background: #110f12;
+    }
+    body.cinema-mode::-webkit-scrollbar-thumb {
+      background: rgba(244, 239, 230, 0.14);
+      border-radius: 999px;
+    }
+
+    /* Reduced Motion Support */
+    @media (prefers-reduced-motion: reduce) {
+      .film-grain, .scroll-line-anim, .prism-dot-pulse {
+        animation: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body class="is-loading cinema-mode bg-obsidian text-alabaster font-sans selection:bg-prismRose/30 selection:text-alabaster overflow-x-hidden">
+
+  <!-- Skip Link for Accessibility -->
+  <a href="#read" id="skip-to-read" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[120] focus:px-4 focus:py-2 focus:rounded-full focus:bg-alabaster focus:text-obsidian focus:font-mono focus:text-xs">
+    Skip to plain text (PRIVATE_PARTS.md)
+  </a>
+
+  <!-- Preloader Darkroom Curtain -->
+  <div id="preloader" class="fixed inset-0 z-[110] bg-obsidian flex flex-col items-center justify-center pointer-events-none transition-opacity duration-700">
+    <div class="w-10 h-10 relative flex items-center justify-center">
+      <svg viewBox="0 0 64 64" class="w-full h-full animate-pulse">
+        <polygon points="32,8 56,52 8,52" fill="none" stroke="url(#preloadGrad)" stroke-width="1.5" />
+        <defs>
+          <linearGradient id="preloadGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#38bdf8" />
+            <stop offset="50%" stop-color="#f43f5e" />
+            <stop offset="100%" stop-color="#f59e0b" />
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+    <p class="mt-4 font-mono text-[10px] tracking-[0.28em] uppercase text-stoneMuted">Calibrating Prism</p>
+  </div>
+
+  <!-- Full-Screen Subtle Film Grain Overlay -->
+  <div class="film-grain fixed inset-0 z-[90] pointer-events-none opacity-[0.055] mix-blend-overlay" aria-hidden="true"></div>
+
+  <!-- =====================================================================
+       CINEMA HUD (Fixed Top Control Bar)
+       ===================================================================== -->
+  <header class="hud fixed top-0 inset-x-0 z-[70] px-3 sm:px-6 py-3 sm:py-4 flex items-center justify-between gap-2 pointer-events-none">
+    <!-- Left HUD Cluster: Prism-Eye Home, File Pill, Dynamic Chapter Crumb -->
+    <div class="flex items-center gap-2 pointer-events-auto min-w-0">
+      <!-- Prism-Eye Home Button -->
+      <button id="hud-home-btn" title="Return to Darkroom (Top)" aria-label="Return to top"
+        class="group relative w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-darkroom/75 hover:bg-darkroom border border-white/10 hover:border-white/25 backdrop-blur-xl flex items-center justify-center transition-all duration-300 shrink-0 shadow-lg">
+        <svg viewBox="0 0 36 36" class="w-5 h-5 transition-transform duration-500 group-hover:scale-110">
+          <defs>
+            <linearGradient id="eyePrismGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#38bdf8" />
+              <stop offset="45%" stop-color="#a855f7" />
+              <stop offset="75%" stop-color="#f43f5e" />
+              <stop offset="100%" stop-color="#f59e0b" />
+            </linearGradient>
+          </defs>
+          <!-- Outer Eye Almond -->
+          <path d="M4 18 C9 10, 27 10, 32 18 C27 26, 9 26, 4 18 Z" fill="none" stroke="#f4efe6" stroke-opacity="0.75" stroke-width="1.35" />
+          <!-- Inner Refracted Prism Diamond -->
+          <polygon id="hud-eye-pupil" points="18,12.5 22.5,18 18,23.5 13.5,18" fill="url(#eyePrismGrad)" />
+          <circle cx="18" cy="18" r="1.4" fill="#110f12" />
+        </svg>
+      </button>
+
+      <!-- File Pill -->
+      <button id="hud-file-btn" title="Toggle Plain-Text Markdown Reader"
+        class="hidden sm:inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-darkroom/75 hover:bg-darkroom border border-white/10 hover:border-white/25 backdrop-blur-xl font-mono text-[11px] tracking-wider text-alabaster/90 transition-all shadow-lg">
+        <span id="hud-filename">PRIVATE_PARTS.md</span>
+        <span class="w-2 h-2 rounded-full prism-dot-pulse inline-block"></span>
+      </button>
+
+      <!-- Dynamic Chapter Breadcrumb Pill -->
+      <div class="inline-flex items-center px-3 py-2 rounded-full bg-darkroom/65 border border-white/10 backdrop-blur-xl font-mono text-[10px] sm:text-[11px] tracking-[0.14em] uppercase text-stoneMuted truncate max-w-[140px] sm:max-w-[230px]">
+        <span id="hud-crumb" class="truncate transition-opacity duration-300">00 · DARKROOM</span>
+      </div>
+    </div>
+
+    <!-- Right HUD Cluster: Live Heat Telemetry Pill, Watch Auto-Play, Index Drawer -->
+    <div class="flex items-center gap-1.5 sm:gap-2 pointer-events-auto shrink-0">
+      <!-- Live Heat Rating Telemetry Pill -->
+      <button id="hud-heat-btn" title="Jump to Heat Scale"
+        class="inline-flex items-center gap-2 px-2.5 sm:px-3.5 py-2 rounded-full bg-darkroom/80 hover:bg-darkroom border border-white/10 backdrop-blur-xl transition-all duration-500 shadow-lg">
+        <span id="hud-heat-label" class="font-mono text-[10px] sm:text-[11px] font-medium tracking-wider text-prismCyan transition-colors duration-500">HEAT 01°</span>
+        <!-- 5-Bar Spectral Thermal Meter -->
+        <span id="hud-heat-bars" class="flex items-end gap-[2.5px] h-3" aria-hidden="true">
+          <i class="block w-[3px] h-1.5 rounded-full bg-prismCyan transition-all duration-300"></i>
+          <i class="block w-[3px] h-2 rounded-full bg-white/15 transition-all duration-300"></i>
+          <i class="block w-[3px] h-2.5 rounded-full bg-white/15 transition-all duration-300"></i>
+          <i class="block w-[3px] h-3 rounded-full bg-white/15 transition-all duration-300"></i>
+          <i class="block w-[3px] h-3.5 rounded-full bg-white/15 transition-all duration-300"></i>
+        </span>
+      </button>
+
+      <!-- Watch Auto-Play Cinema Button -->
+      <button id="hud-watch-btn"
+        class="inline-flex items-center gap-2 px-3 sm:px-3.5 py-2 rounded-full bg-darkroom/80 hover:bg-alabaster hover:text-obsidian border border-white/15 backdrop-blur-xl font-mono text-[10px] sm:text-[11px] tracking-wider lowercase transition-all duration-300 shadow-lg">
+        <span id="hud-watch-dot" class="w-1.5 h-1.5 rounded-full bg-alabaster/60 transition-colors"></span>
+        <span id="hud-watch-text">watch</span>
+      </button>
+
+      <!-- Index Drawer Button -->
+      <button id="hud-index-btn"
+        class="inline-flex items-center gap-2 px-3 sm:px-3.5 py-2 rounded-full bg-alabaster/10 hover:bg-alabaster/20 border border-white/15 backdrop-blur-xl font-mono text-[10px] sm:text-[11px] tracking-wider lowercase text-alabaster transition-all duration-300 shadow-lg">
+        <span>index</span>
+        <span class="flex flex-col gap-[3px] w-3">
+          <i class="block h-[1.5px] w-full bg-alabaster rounded-full"></i>
+          <i class="block h-[1.5px] w-2/3 ml-auto bg-alabaster rounded-full"></i>
+        </span>
+      </button>
+    </div>
+  </header>
+
+  <!-- =====================================================================
+       LAYER 1: FIXED FULL-VIEWPORT CINEMATIC STAGE (Scenes 0–4)
+       ===================================================================== -->
+  <main id="stage" class="fixed inset-0 z-10 overflow-hidden bg-obsidian select-none">
+    <!-- Dynamic Ambient Prism Light Wash Background -->
+    <div id="stage-ambient" class="absolute inset-0 pointer-events-none transition-opacity duration-700"
+      style="background: radial-gradient(circle at 50% 30%, rgba(56, 189, 248, 0.09), transparent 60%);">
+    </div>
+
+    <!-- ==================== SCENE 0: THE DARKROOM (0% – 21%) ==================== -->
+    <section id="scene-0" class="scene-layer absolute inset-0 flex flex-col items-center justify-between px-4 sm:px-8 pt-20 pb-8 sm:pb-10">
+      <!-- Architectural Set: Back Wall & Perspective Floor Shadow -->
+      <div id="s0-wall" class="absolute inset-x-0 top-0 h-[66%] bg-gradient-to-b from-[#17131a] via-[#131016] to-[#110f12] border-b border-white/[0.04] pointer-events-none"></div>
+      <div id="s0-floor" class="absolute inset-x-0 bottom-0 h-[34%] pointer-events-none"
+        style="background: linear-gradient(180deg, rgba(17,15,18,1) 0%, rgba(28,22,32,0.85) 35%, rgba(12,10,14,1) 100%);">
+        <!-- Subtle Perspective Floor Grid Lines -->
+        <div class="absolute inset-0 opacity-20"
+          style="background-image: linear-gradient(to right, rgba(244,239,230,0.08) 1px, transparent 1px), linear-gradient(to bottom, rgba(244,239,230,0.06) 1px, transparent 1px); background-size: 64px 42px; transform: perspective(420px) rotateX(62deg); transform-origin: top center;">
+        </div>
+      </div>
+
+      <!-- Top Metadata Strip -->
+      <div id="s0-meta-top" class="relative z-10 w-full max-w-5xl flex items-center justify-between font-mono text-[10px] sm:text-[11px] tracking-[0.22em] uppercase text-stoneMuted pt-2">
+        <span data-bind="author-upper">RAVENCLAW</span>
+        <span class="hidden sm:inline text-white/25">///</span>
+        <span>EDITION 01 · PRISM</span>
+      </div>
+
+      <!-- Centerpiece: Interactive Scroll-Reactive SVG Optical Prism + Title -->
+      <div class="relative z-10 w-full max-w-5xl flex flex-col items-center justify-center my-auto">
+        <!-- Optical Glass Prism SVG -->
+        <div id="s0-prism-wrap" class="relative w-full max-w-[680px] h-[160px] sm:h-[210px] -mb-4 sm:-mb-6 pointer-events-none">
+          <svg id="s0-prism-svg" viewBox="0 0 800 260" class="w-full h-full overflow-visible">
+            <defs>
+              <filter id="rayGlow" x="-20%" y="-40%" width="140%" height="180%">
+                <feGaussianBlur stdDeviation="5" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+              <linearGradient id="incidentBeam" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#f4efe6" stop-opacity="0" />
+                <stop offset="65%" stop-color="#f4efe6" stop-opacity="0.7" />
+                <stop offset="100%" stop-color="#ffffff" stop-opacity="1" />
+              </linearGradient>
+              <linearGradient id="glassFace" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ffffff" stop-opacity="0.18" />
+                <stop offset="45%" stop-color="#a855f7" stop-opacity="0.06" />
+                <stop offset="100%" stop-color="#38bdf8" stop-opacity="0.14" />
+              </linearGradient>
+              <linearGradient id="rayCyan" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.95" />
+                <stop offset="100%" stop-color="#38bdf8" stop-opacity="0" />
+              </linearGradient>
+              <linearGradient id="rayViolet" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#a855f7" stop-opacity="0.95" />
+                <stop offset="100%" stop-color="#a855f7" stop-opacity="0" />
+              </linearGradient>
+              <linearGradient id="rayRose" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#f43f5e" stop-opacity="0.95" />
+                <stop offset="100%" stop-color="#f43f5e" stop-opacity="0" />
+              </linearGradient>
+              <linearGradient id="rayVermilion" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#fc4109" stop-opacity="0.95" />
+                <stop offset="100%" stop-color="#fc4109" stop-opacity="0" />
+              </linearGradient>
+              <linearGradient id="rayAmber" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.95" />
+                <stop offset="100%" stop-color="#f59e0b" stop-opacity="0" />
+              </linearGradient>
+            </defs>
+
+            <!-- Incoming Pure White Beam -->
+            <line id="s0-beam-in" x1="10" y1="158" x2="364" y2="128" stroke="url(#incidentBeam)" stroke-width="2.5" filter="url(#rayGlow)" />
+
+            <!-- Internal Refracted Caustic Glow -->
+            <polygon id="s0-internal-beam" points="364,128 434,114 441,148" fill="#ffffff" fill-opacity="0.16" />
+
+            <!-- Outgoing Fanned Spectral Rays (JS widens spread on scroll & cursor) -->
+            <g id="s0-rays" filter="url(#rayGlow)">
+              <polygon id="ray-1" points="432,115 795,46 795,68 434,122" fill="url(#rayCyan)" opacity="0.88" />
+              <polygon id="ray-2" points="434,122 795,84 795,108 436,129" fill="url(#rayViolet)" opacity="0.88" />
+              <polygon id="ray-3" points="436,129 795,122 795,148 438,136" fill="url(#rayRose)" opacity="0.9" />
+              <polygon id="ray-4" points="438,136 795,160 795,186 440,143" fill="url(#rayVermilion)" opacity="0.9" />
+              <polygon id="ray-5" points="440,143 795,198 795,224 442,150" fill="url(#rayAmber)" opacity="0.86" />
+            </g>
+
+            <!-- Precision Optical Glass Prism -->
+            <g id="s0-glass-tri">
+              <polygon points="400,44 476,184 324,184" fill="url(#glassFace)" stroke="#f4efe6" stroke-opacity="0.55" stroke-width="1.4" />
+              <!-- Inner Bevel Highlight -->
+              <polygon points="400,56 462,175 338,175" fill="none" stroke="#ffffff" stroke-opacity="0.15" stroke-width="0.8" />
+              <line x1="400" y1="44" x2="386" y2="184" stroke="#ffffff" stroke-opacity="0.12" stroke-width="1" />
+            </g>
+          </svg>
+        </div>
+
+        <!-- Monumental Editorial Title -->
+        <div id="s0-title-wrap" class="text-center relative">
+          <h1 class="font-serif tracking-[-0.02em] leading-[0.9] text-[clamp(3.2rem,10vw,8.2rem)] text-alabaster flex flex-wrap items-center justify-center gap-x-3 sm:gap-x-6">
+            <span id="s0-word-1" class="inline-block">PRIVATE</span>
+            <!-- Prism Diamond Dot Separator -->
+            <span id="s0-diamond" class="inline-flex items-center justify-center w-4 h-4 sm:w-6 sm:h-6 rotate-45 rounded-[3px] prism-dot-pulse shadow-[0_0_24px_rgba(244,63,94,0.6)]"></span>
+            <span id="s0-word-2" class="inline-block italic font-normal">PARTS</span>
+          </h1>
+        </div>
+
+        <!-- Markdown Blockquote Lines -->
+        <div id="s0-quotes" class="mt-6 sm:mt-8 max-w-xl w-full space-y-1.5 sm:space-y-2 text-left sm:text-center px-2">
+          <p class="font-mono text-xs sm:text-sm text-alabaster/80 leading-relaxed">
+            <span class="text-prismCyan mr-2">&gt;</span><span data-bind="quote-1">a prism for the things said after midnight.</span>
+          </p>
+          <p class="font-mono text-xs sm:text-sm text-alabaster/65 leading-relaxed">
+            <span class="text-prismViolet mr-2">&gt;</span><span data-bind="quote-2">not a feed. not a performance. not sanitized.</span>
+          </p>
+          <p class="font-mono text-xs sm:text-sm text-alabaster/55 leading-relaxed">
+            <span class="text-prismRose mr-2">&gt;</span><span data-bind="quote-3">refracted by ravenclaw.</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Bottom Scroll Hint -->
+      <div id="s0-scroll-hint" class="relative z-10 flex flex-col items-center gap-2 pb-1">
+        <span class="font-mono text-[10px] tracking-[0.28em] uppercase text-stoneMuted">scroll</span>
+        <div class="w-[1px] h-8 bg-white/15 overflow-hidden relative">
+          <div class="scroll-line-anim absolute inset-0 prism-bar"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SCENE 1: THE PRISM ENGINE (19% – 43%) ==================== -->
+    <section id="scene-1" class="scene-layer absolute inset-0 flex items-center justify-center px-4 sm:px-8 opacity-0 pointer-events-none">
+      <!-- Deep Cellar Optical Chamber Backdrop -->
+      <div class="absolute inset-0 pointer-events-none"
+        style="background: radial-gradient(circle at 50% 50%, rgba(168, 85, 247, 0.08) 0%, rgba(17, 15, 18, 0.96) 65%);">
+      </div>
+
+      <!-- Procedural SVG Optical Refraction Machine with Real feDropShadow -->
+      <div class="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
+        <svg id="s1-engine-svg" viewBox="0 0 900 900" class="w-[min(96vw,780px)] h-[min(96vw,780px)] opacity-90 overflow-visible">
+          <defs>
+            <filter id="engineShadow" x="-20%" y="-20%" width="140%" height="140%">
+              <feDropShadow dx="10" dy="18" stdDeviation="12" flood-color="#050307" flood-opacity="0.78" />
+            </filter>
+            <filter id="armShadow" x="-25%" y="-25%" width="150%" height="150%">
+              <feDropShadow dx="18" dy="26" stdDeviation="16" flood-color="#040206" flood-opacity="0.65" />
+            </filter>
+            <linearGradient id="lensSpectrum" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#38bdf8" />
+              <stop offset="35%" stop-color="#a855f7" />
+              <stop offset="70%" stop-color="#f43f5e" />
+              <stop offset="100%" stop-color="#f59e0b" />
+            </linearGradient>
+          </defs>
+
+          <!-- Outer Calibration Ring (Rotates Clockwise on Scroll) -->
+          <g id="eng-outer-ring" filter="url(#engineShadow)" style="transform-origin: 450px 450px;">
+            <circle cx="450" cy="450" r="340" fill="none" stroke="#f4efe6" stroke-opacity="0.12" stroke-width="1" stroke-dasharray="4 10" />
+            <circle cx="450" cy="450" r="306" fill="none" stroke="url(#lensSpectrum)" stroke-opacity="0.32" stroke-width="1.5" />
+            <!-- Calibration Notches -->
+            <line x1="450" y1="95" x2="450" y2="128" stroke="#38bdf8" stroke-width="2" />
+            <line x1="450" y1="772" x2="450" y2="805" stroke="#f43f5e" stroke-width="2" />
+            <line x1="95" y1="450" x2="128" y2="450" stroke="#a855f7" stroke-width="2" />
+            <line x1="772" y1="450" x2="805" y2="450" stroke="#f59e0b" stroke-width="2" />
+            <!-- Floating Optical Nodes -->
+            <circle cx="690" cy="210" r="7" fill="#1a161c" stroke="#38bdf8" stroke-width="1.5" />
+            <circle cx="210" cy="690" r="7" fill="#1a161c" stroke="#fc4109" stroke-width="1.5" />
+          </g>
+
+          <!-- Middle Faceted Glass Polygon (Counter-Rotates on Scroll) -->
+          <g id="eng-mid-facets" filter="url(#engineShadow)" style="transform-origin: 450px 450px;">
+            <polygon points="450,190 675,320 675,580 450,710 225,580 225,320" fill="#1a161c" fill-opacity="0.45" stroke="#f4efe6" stroke-opacity="0.22" stroke-width="1.2" />
+            <polygon points="450,235 636,342 636,558 450,665 264,558 264,342" fill="none" stroke="url(#lensSpectrum)" stroke-opacity="0.38" stroke-width="1" />
+            <line x1="450" y1="190" x2="450" y2="710" stroke="#ffffff" stroke-opacity="0.06" stroke-width="1" />
+            <line x1="225" y1="320" x2="675" y2="580" stroke="#ffffff" stroke-opacity="0.06" stroke-width="1" />
+            <line x1="675" y1="320" x2="225" y2="580" stroke="#ffffff" stroke-opacity="0.06" stroke-width="1" />
+          </g>
+
+          <!-- Inner Prism Core & Dynamic Light Rays -->
+          <g id="eng-inner-core" filter="url(#engineShadow)" style="transform-origin: 450px 450px;">
+            <polygon points="450,312 570,520 330,520" fill="#231c28" fill-opacity="0.65" stroke="url(#lensSpectrum)" stroke-width="1.8" />
+            <circle cx="450" cy="450" r="46" fill="#110f12" stroke="#f4efe6" stroke-opacity="0.35" stroke-width="1.2" />
+            <circle cx="450" cy="450" r="14" fill="url(#lensSpectrum)" opacity="0.85" />
+          </g>
+
+          <!-- Articulated Optical Refractor Arm (Sweeps across the lens on Scroll) -->
+          <g id="eng-arm" filter="url(#armShadow)" style="transform-origin: 450px 450px;">
+            <line x1="450" y1="450" x2="450" y2="140" stroke="#f4efe6" stroke-opacity="0.6" stroke-width="2.5" stroke-linecap="round" />
+            <circle cx="450" cy="140" r="18" fill="#1a161c" stroke="url(#lensSpectrum)" stroke-width="2.5" />
+            <circle cx="450" cy="140" r="5" fill="#f4efe6" />
+          </g>
+        </svg>
+      </div>
+
+      <!-- Kinetic Typography Stage (Floating Spectral Dot Strikes Words into Periods) -->
+      <div class="relative z-10 w-full max-w-4xl mx-auto text-center px-2">
+        <!-- Chapter Tag -->
+        <p class="font-mono text-[11px] tracking-[0.26em] uppercase text-stoneMuted mb-6">
+          <span class="text-prismViolet">##</span> 01 · the prism engine
+        </p>
+
+        <!-- Dynamic Stage Container for the 3 Kinetic Beats -->
+        <div class="relative min-h-[210px] sm:min-h-[260px] flex items-center justify-center">
+          <!-- Beat A: Surface is a mask. -->
+          <div id="s1-beat-a" class="absolute inset-0 flex flex-col items-center justify-center transition-all duration-500">
+            <h2 class="font-serif text-[clamp(2.5rem,7.2vw,6.2rem)] leading-[0.98] text-alabaster tracking-tight">
+              Surface is a <span class="italic">mask</span><span id="s1-dot-a" class="inline-block w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-prismCyan ml-1 align-baseline shadow-[0_0_20px_#38bdf8]"></span>
+            </h2>
+            <p class="mt-4 max-w-md font-sans text-sm sm:text-base text-stoneMuted">
+              Everyone edits themselves for daylight. This lens only opens after dark.
+            </p>
+          </div>
+
+          <!-- Beat B: Every truth splits under light. -->
+          <div id="s1-beat-b" class="absolute inset-0 flex flex-col items-center justify-center opacity-0 pointer-events-none">
+            <h2 class="font-serif text-[clamp(2.3rem,6.8vw,5.8rem)] leading-[0.98] text-alabaster tracking-tight">
+              Every truth <span class="italic prism-text">splits</span> under light<span id="s1-dot-b" class="inline-block w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-prismViolet ml-1 align-baseline shadow-[0_0_20px_#a855f7]"></span>
+            </h2>
+            <p class="mt-4 max-w-md font-sans text-sm sm:text-base text-stoneMuted">
+              Pass a polite sentence through glass and you see the pulse hidden inside it.
+            </p>
+          </div>
+
+          <!-- Beat C: Raw. Sharp. Private. (Tri-strike rhythmic beats) -->
+          <div id="s1-beat-c" class="absolute inset-0 flex flex-col items-center justify-center opacity-0 pointer-events-none">
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-10 font-serif text-[clamp(3rem,8vw,6.8rem)] leading-none">
+              <span id="s1-strike-1" class="relative inline-flex items-baseline opacity-20 transition-all duration-300">
+                Raw<i class="inline-block w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-prismRose ml-1 shadow-[0_0_20px_#f43f5e]"></i>
+              </span>
+              <span id="s1-strike-2" class="relative inline-flex items-baseline italic opacity-20 transition-all duration-300">
+                Sharp<i class="inline-block w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-prismVermilion ml-1 shadow-[0_0_20px_#fc4109]"></i>
+              </span>
+              <span id="s1-strike-3" class="relative inline-flex items-baseline opacity-20 transition-all duration-300">
+                Private<i class="inline-block w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-prismAmber ml-1 shadow-[0_0_20px_#f59e0b]"></i>
+              </span>
+            </div>
+            <p class="mt-6 font-mono text-xs tracking-[0.2em] uppercase text-stoneMuted">
+              calibrated by heat · read accordingly
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SCENE 2: THE HEAT SCALE (41% – 65%) ==================== -->
+    <section id="scene-2" class="scene-layer absolute inset-0 flex flex-col items-center justify-center px-4 sm:px-8 pt-16 pb-10 opacity-0 pointer-events-none">
+      <!-- Dynamic Thermal Ambient Glow (Shifts Color 1° -> 5°) -->
+      <div id="s2-thermal-wash" class="absolute inset-0 pointer-events-none transition-all duration-500"
+        style="background: radial-gradient(ellipse at 50% 45%, rgba(56,189,248,0.18), transparent 65%);">
+      </div>
+
+      <div class="relative z-10 w-full max-w-4xl mx-auto flex flex-col items-center">
+        <!-- Header -->
+        <p class="font-mono text-[11px] tracking-[0.26em] uppercase text-stoneMuted mb-3">
+          <span id="s2-md-hash" class="text-prismCyan transition-colors duration-300">##</span> 02 · the heat rating
+        </p>
+
+        <!-- Radial + Numeric Thermal Readout -->
+        <div class="relative flex flex-col items-center my-2 sm:my-4">
+          <div class="relative w-44 h-44 sm:w-56 sm:h-56 flex items-center justify-center">
+            <svg viewBox="0 0 220 220" class="w-full h-full -rotate-90">
+              <defs>
+                <linearGradient id="heatArcGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#38bdf8" />
+                  <stop offset="28%" stop-color="#a855f7" />
+                  <stop offset="55%" stop-color="#f43f5e" />
+                  <stop offset="80%" stop-color="#fc4109" />
+                  <stop offset="100%" stop-color="#f59e0b" />
+                </linearGradient>
+              </defs>
+              <!-- Base Track -->
+              <circle cx="110" cy="110" r="92" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="4" />
+              <!-- Active Sweeping Spectrum Arc -->
+              <circle id="s2-gauge-arc" cx="110" cy="110" r="92" fill="none" stroke="url(#heatArcGrad)" stroke-width="5.5"
+                stroke-linecap="round" stroke-dasharray="578" stroke-dashoffset="462" />
+            </svg>
+            <!-- Center Degree Number -->
+            <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+              <span id="s2-degree-num" class="font-serif text-6xl sm:text-7xl leading-none text-alabaster">01°</span>
+              <span id="s2-tier-name" class="mt-1 font-mono text-[11px] sm:text-xs tracking-[0.24em] uppercase text-prismCyan transition-colors duration-300">QUIET</span>
+            </div>
+          </div>
+
+          <!-- Active Tier Description -->
+          <blockquote id="s2-tier-desc" class="mt-4 sm:mt-6 text-center font-serif italic text-2xl sm:text-4xl text-alabaster/95 max-w-xl leading-snug min-h-[3.5rem] sm:min-h-[4.5rem]">
+            “What you admit to yourself at 2 AM.”
+          </blockquote>
+        </div>
+
+        <!-- Horizontal 5-Tier Interactive Stepper Bar -->
+        <div class="mt-5 sm:mt-8 w-full max-w-2xl">
+          <!-- Continuous Thermal Spectrum Rail -->
+          <div class="relative h-1.5 w-full rounded-full bg-white/10 overflow-hidden mb-4">
+            <div id="s2-rail-fill" class="h-full prism-bar rounded-full transition-all duration-200" style="width: 20%;"></div>
+          </div>
+          <!-- 5 Clickable Tier Pills -->
+          <div id="s2-tier-pills" class="grid grid-cols-5 gap-1.5 sm:gap-2.5">
+            <!-- Populated & updated dynamically by JS -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SCENE 3: THE ARCHIVE TABLE (63% – 87%) ==================== -->
+    <section id="scene-3" class="scene-layer absolute inset-0 flex flex-col justify-center px-4 sm:px-8 pt-20 pb-8 opacity-0 pointer-events-none">
+      <!-- Camera-Panning Geometric Prism Grid SVG Backdrop -->
+      <div class="absolute inset-0 pointer-events-none overflow-hidden opacity-25">
+        <svg id="s3-grid-svg" viewBox="0 0 1200 700" class="w-[120%] h-[120%] -ml-[10%] -mt-[5%]">
+          <g id="s3-cam" stroke="rgba(244,239,230,0.14)" stroke-width="0.8" fill="none">
+            <path d="M0 140 L1200 140 M0 280 L1200 280 M0 420 L1200 420 M0 560 L1200 560" />
+            <path d="M200 0 L200 700 M400 0 L400 700 M600 0 L600 700 M800 0 L800 700 M1000 0 L1000 700" />
+            <polygon points="600,90 880,580 320,580" stroke="url(#lensSpectrum)" stroke-opacity="0.45" stroke-width="1.2" />
+          </g>
+        </svg>
+      </div>
+
+      <div class="relative z-10 w-full max-w-6xl mx-auto flex flex-col max-h-[calc(100vh-7.5rem)]">
+        <!-- Header & Stage Heat Filter Bar -->
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-5 sm:mb-6 shrink-0">
+          <div>
+            <p class="font-mono text-[11px] tracking-[0.24em] uppercase text-stoneMuted mb-1.5">
+              <span class="text-prismRose">##</span> 03 · inside private parts
+            </p>
+            <h2 class="font-serif text-4xl sm:text-5xl md:text-6xl leading-none text-alabaster">
+              the <span class="italic prism-text">(private)</span> archive
+            </h2>
+          </div>
+
+          <!-- Interactive Stage Heat Filter Pills -->
+          <div id="s3-filters" class="flex flex-wrap items-center gap-1.5 sm:gap-2" role="group" aria-label="Filter archive by heat rating">
+            <button data-heat-filter="all" class="filter-pill px-3 py-1.5 rounded-full font-mono text-[10px] sm:text-[11px] tracking-wider uppercase border transition-all bg-alabaster text-obsidian border-alabaster">
+              ALL
+            </button>
+            <button data-heat-filter="simmer" class="filter-pill px-3 py-1.5 rounded-full font-mono text-[10px] sm:text-[11px] tracking-wider uppercase border transition-all bg-darkroom/80 text-stoneMuted border-white/15 hover:border-prismCyan/60 hover:text-alabaster">
+              1–2° SIMMER
+            </button>
+            <button data-heat-filter="burn" class="filter-pill px-3 py-1.5 rounded-full font-mono text-[10px] sm:text-[11px] tracking-wider uppercase border transition-all bg-darkroom/80 text-stoneMuted border-white/15 hover:border-prismRose/60 hover:text-alabaster">
+              3–4° BURN
+            </button>
+            <button data-heat-filter="incandescent" class="filter-pill px-3 py-1.5 rounded-full font-mono text-[10px] sm:text-[11px] tracking-wider uppercase border transition-all bg-darkroom/80 text-stoneMuted border-white/15 hover:border-prismAmber/60 hover:text-alabaster">
+              5° INCANDESCENT
+            </button>
+          </div>
+        </div>
+
+        <!-- Archive Entry Cards Grid (Scrollable vertically on compact viewports) -->
+        <div id="s3-cards-grid" class="custom-scroll grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 overflow-y-auto pr-1 pb-2">
+          <!-- Populated dynamically from state.entries -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SCENE 4: THE FINALE & EXPORT (85% – 100%) ==================== -->
+    <section id="scene-4" class="scene-layer absolute inset-0 flex flex-col items-center justify-center px-4 sm:px-8 pt-16 pb-10 opacity-0 pointer-events-none">
+      <!-- Quiet Refracted Horizon Glow -->
+      <div class="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[1px] prism-bar opacity-35 pointer-events-none"></div>
+      <div class="absolute inset-0 pointer-events-none"
+        style="background: radial-gradient(circle at 50% 50%, rgba(244,63,94,0.09), transparent 55%);">
+      </div>
+
+      <div class="relative z-10 w-full max-w-2xl mx-auto text-center bg-darkroom/75 backdrop-blur-2xl border border-white/10 rounded-3xl p-6 sm:p-10 shadow-2xl">
+        <p class="font-mono text-[10px] sm:text-[11px] tracking-[0.28em] uppercase text-stoneMuted mb-4">
+          <span class="text-prismAmber">##</span> 04 · end of reel
+        </p>
+
+        <h2 class="font-serif text-3xl sm:text-5xl text-alabaster leading-tight">
+          Light leaves nothing <span class="italic prism-text">unseen.</span>
+        </h2>
+
+        <p class="mt-4 font-sans text-sm sm:text-base text-stoneMuted max-w-lg mx-auto leading-relaxed">
+          This file will keep shifting as new nights happen. Read it in plain text, keep a local copy, or open Creator Mode to rewrite any line yourself.
+        </p>
+
+        <p class="mt-5 font-mono text-xs text-alabaster/75">
+          — <span data-bind="author-lower">ravenclaw</span> · last refracted after midnight
+        </p>
+
+        <!-- Action Buttons Grid -->
+        <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
+          <button id="fin-read-btn"
+            class="w-full px-5 py-3.5 rounded-2xl bg-alabaster text-obsidian hover:bg-white font-mono text-xs font-medium tracking-wider transition-all flex items-center justify-center gap-2 shadow-lg">
+            <span>Open Plain-Text Reader</span>
+          </button>
+
+          <button id="fin-download-btn"
+            class="w-full px-5 py-3.5 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/15 text-alabaster font-mono text-xs tracking-wider transition-all flex items-center justify-center gap-2">
+            <span>Download PRIVATE_PARTS.md</span>
+          </button>
+
+          <button id="fin-creator-btn"
+            class="w-full px-5 py-3.5 rounded-2xl bg-gradient-to-r from-prismCyan/15 via-prismViolet/15 to-prismRose/15 hover:from-prismCyan/25 hover:to-prismRose/25 border border-white/15 text-alabaster font-mono text-xs tracking-wider transition-all flex items-center justify-center gap-2">
+            <span>Creator Mode · Edit Copy</span>
+          </button>
+
+          <button id="fin-replay-btn"
+            class="w-full px-5 py-3.5 rounded-2xl bg-darkroom hover:bg-white/10 border border-white/10 text-stoneMuted hover:text-alabaster font-mono text-xs tracking-wider transition-all flex items-center justify-center gap-2">
+            <span>↺ Replay Film</span>
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Virtual Scroll Track Driving Smooth Lerp Scrubbing (880vh) -->
+  <div id="scroll-track" class="relative z-0 w-full" style="height: 880vh;" aria-hidden="true"></div>
+
+  <!-- Bottom Prismatic Hairline Progress Bar -->
+  <div id="progress-wrap" class="fixed bottom-0 inset-x-0 z-[75] h-[2.5px] bg-white/[0.06] pointer-events-none">
+    <div id="progress-bar" class="h-full prism-bar w-0"></div>
+  </div>
+
+  <!-- =====================================================================
+       LAYER 2: SEMANTIC PLAIN-TEXT MARKDOWN READING MODE (<article id="read">)
+       ===================================================================== -->
+  <div id="read-overlay" class="fixed inset-0 z-[85] bg-obsidian text-alabaster overflow-y-auto custom-scroll hidden">
+    <!-- Sticky Reader Bar -->
+    <div class="sticky top-0 z-10 bg-obsidian/90 backdrop-blur-xl border-b border-white/10 px-4 sm:px-8 py-3.5 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <span class="w-2 h-2 rounded-full prism-dot-pulse"></span>
+        <span class="font-mono text-xs tracking-wider text-alabaster">PRIVATE_PARTS.md</span>
+        <span class="font-mono text-[10px] uppercase tracking-widest text-stoneMuted hidden sm:inline">plain-text mode</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <button id="read-copy-btn" class="px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 font-mono text-[11px] text-alabaster transition">
+          copy md
+        </button>
+        <button id="read-download-btn" class="px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 font-mono text-[11px] text-alabaster transition">
+          download .md
+        </button>
+        <button id="read-close-btn" class="px-4 py-1.5 rounded-full bg-alabaster text-obsidian hover:bg-white font-mono text-[11px] font-medium transition">
+          back to film
+        </button>
+      </div>
+    </div>
+
+    <!-- Clean Semantic Article Generated Dynamically from Content State -->
+    <article id="read" class="max-w-2xl mx-auto px-5 sm:px-8 py-12 sm:py-16 space-y-8 font-sans leading-relaxed" lang="en">
+      <!-- Rendered dynamically by renderPlainTextArticle() -->
+    </article>
+  </div>
+
+  <!-- =====================================================================
+       FULL-SCREEN INDEX DRAWER + ZERO-CODE CREATOR COPY EDITOR
+       ===================================================================== -->
+  <div id="index-drawer" class="fixed inset-0 z-[95] bg-[#110f12]/92 backdrop-blur-2xl hidden opacity-0 transition-opacity duration-300 overflow-y-auto custom-scroll" role="dialog" aria-modal="true" aria-label="Index and Creator Mode">
+    <div class="max-w-5xl mx-auto px-4 sm:px-8 py-6 sm:py-10 min-h-full flex flex-col">
+      <!-- Drawer Header -->
+      <div class="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-white/10">
+        <div class="flex items-center gap-2">
+          <button id="tab-chapters-btn" class="px-4 py-2 rounded-full font-mono text-xs tracking-wider uppercase bg-alabaster text-obsidian transition">
+            Index &amp; Archive
+          </button>
+          <button id="tab-creator-btn" class="px-4 py-2 rounded-full font-mono text-xs tracking-wider uppercase bg-white/10 text-alabaster hover:bg-white/15 transition">
+            Creator Mode
+          </button>
+        </div>
+        <button id="index-close-btn" class="px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 border border-white/10 font-mono text-xs text-alabaster transition">
+          close [esc]
+        </button>
+      </div>
+
+      <!-- TAB 1: CHAPTERS & FILTERABLE ARCHIVE -->
+      <div id="drawer-panel-chapters" class="py-6 space-y-8 flex-1">
+        <!-- Quick Scene Jump Cards -->
+        <div>
+          <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-stoneMuted mb-3">Film Chapters</p>
+          <div id="drawer-chapters-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2.5">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <!-- Drawer Archive with Heat Filter -->
+        <div>
+          <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+            <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-stoneMuted">Archive Entries by Heat</p>
+            <div id="drawer-filters" class="flex flex-wrap gap-1.5">
+              <button data-drawer-filter="all" class="px-3 py-1 rounded-full font-mono text-[10px] uppercase tracking-wider bg-alabaster text-obsidian">ALL</button>
+              <button data-drawer-filter="simmer" class="px-3 py-1 rounded-full font-mono text-[10px] uppercase tracking-wider bg-white/10 text-stoneMuted hover:text-alabaster">1–2° SIMMER</button>
+              <button data-drawer-filter="burn" class="px-3 py-1 rounded-full font-mono text-[10px] uppercase tracking-wider bg-white/10 text-stoneMuted hover:text-alabaster">3–4° BURN</button>
+              <button data-drawer-filter="incandescent" class="px-3 py-1 rounded-full font-mono text-[10px] uppercase tracking-wider bg-white/10 text-stoneMuted hover:text-alabaster">5° INCANDESCENT</button>
+            </div>
+          </div>
+          <div id="drawer-entries-list" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <!-- Drawer Utility Bar -->
+        <div class="pt-4 border-t border-white/10 flex flex-wrap items-center justify-between gap-3">
+          <p class="font-mono text-[11px] text-stoneMuted">Shortcuts: [Space] watch · [↑/↓] scroll · [Esc] close</p>
+          <div class="flex flex-wrap gap-2">
+            <button id="drawer-read-btn" class="px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 font-mono text-xs text-alabaster transition">
+              Plain-Text Read Mode
+            </button>
+            <button id="drawer-download-btn" class="px-4 py-2 rounded-full bg-alabaster text-obsidian hover:bg-white font-mono text-xs font-medium transition">
+              Download PRIVATE_PARTS.md
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 2: ZERO-CODE CREATOR COPY EDITOR -->
+      <div id="drawer-panel-creator" class="py-6 space-y-6 flex-1 hidden">
+        <div class="rounded-2xl bg-darkroom/90 border border-white/10 p-5 sm:p-6">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+            <div>
+              <h3 class="font-serif text-2xl sm:text-3xl text-alabaster">Live Identity &amp; Opening Copy</h3>
+              <p class="text-xs text-stoneMuted font-sans">Edit right here—changes update the film, plain-text file, and download instantly.</p>
+            </div>
+            <button id="creator-reset-btn" class="px-3 py-1.5 rounded-full border border-white/15 font-mono text-[10px] uppercase tracking-wider text-stoneMuted hover:text-alabaster hover:border-white/30 transition">
+              Reset Defaults
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label for="ed-title" class="block font-mono text-[10px] uppercase tracking-widest text-stoneMuted mb-1.5">Site Title (2 words works best)</label>
+              <input id="ed-title" type="text" class="w-full px-3.5 py-2.5 rounded-xl bg-obsidian border border-white/15 text-sm text-alabaster focus:outline-none focus:border-prismCyan" />
+            </div>
+            <div>
+              <label for="ed-author" class="block font-mono text-[10px] uppercase tracking-widest text-stoneMuted mb-1.5">Pseudonym / Author</label>
+              <input id="ed-author" type="text" class="w-full px-3.5 py-2.5 rounded-xl bg-obsidian border border-white/15 text-sm text-alabaster focus:outline-none focus:border-prismViolet" />
+            </div>
+            <div class="sm:col-span-2">
+              <label for="ed-q1" class="block font-mono text-[10px] uppercase tracking-widest text-stoneMuted mb-1.5">Opening Quote Line 1</label>
+              <input id="ed-q1" type="text" class="w-full px-3.5 py-2.5 rounded-xl bg-obsidian border border-white/15 text-sm font-mono text-alabaster focus:outline-none focus:border-prismCyan" />
+            </div>
+            <div class="sm:col-span-2">
+              <label for="ed-q2" class="block font-mono text-[10px] uppercase tracking-widest text-stoneMuted mb-1.5">Opening Quote Line 2</label>
+              <input id="ed-q2" type="text" class="w-full px-3.5 py-2.5 rounded-xl bg-obsidian border border-white/15 text-sm font-mono text-alabaster focus:outline-none focus:border-prismViolet" />
+            </div>
+            <div class="sm:col-span-2">
+              <label for="ed-q3" class="block font-mono text-[10px] uppercase tracking-widest text-stoneMuted mb-1.5">Opening Quote Line 3</label>
+              <input id="ed-q3" type="text" class="w-full px-3.5 py-2.5 rounded-xl bg-obsidian border border-white/15 text-sm font-mono text-alabaster focus:outline-none focus:border-prismRose" />
+            </div>
+          </div>
+
+          <div class="mt-4 flex justify-end">
+            <button id="creator-save-meta-btn" class="px-5 py-2.5 rounded-full bg-alabaster text-obsidian hover:bg-white font-mono text-xs font-medium tracking-wider transition">
+              Apply Identity Changes
+            </button>
+          </div>
+        </div>
+
+        <!-- Add New Archive Entry Form -->
+        <div class="rounded-2xl bg-darkroom/90 border border-white/10 p-5 sm:p-6">
+          <h3 class="font-serif text-2xl sm:text-3xl text-alabaster mb-1">Add New Archive Entry</h3>
+          <p class="text-xs text-stoneMuted mb-4">Publish a new piece straight into Scene 3 with its own Heat Rating (1°–5°).</p>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="sm:col-span-2">
+              <label for="new-entry-title" class="block font-mono text-[10px] uppercase tracking-widest text-stoneMuted mb-1.5">Entry Title</label>
+              <input id="new-entry-title" type="text" placeholder="e.g., Notes From the Fire Escape" class="w-full px-3.5 py-2.5 rounded-xl bg-obsidian border border-white/15 text-sm text-alabaster focus:outline-none focus:border-prismRose" />
+            </div>
+            <div>
+              <label for="new-entry-heat" class="block font-mono text-[10px] uppercase tracking-widest text-stoneMuted mb-1.5">Heat Rating</label>
+              <select id="new-entry-heat" class="w-full px-3.5 py-2.5 rounded-xl bg-obsidian border border-white/15 text-sm font-mono text-alabaster focus:outline-none focus:border-prismAmber">
+                <option value="1">01° · QUIET</option>
+                <option value="2">02° · WARM</option>
+                <option value="3" selected>03° · SLOW BURN</option>
+                <option value="4">04° · FEVER</option>
+                <option value="5">05° · INCANDESCENT</option>
+              </select>
+            </div>
+            <div class="sm:col-span-3">
+              <label for="new-entry-excerpt" class="block font-mono text-[10px] uppercase tracking-widest text-stoneMuted mb-1.5">One-Line Teaser</label>
+              <input id="new-entry-excerpt" type="text" placeholder="Short atmospheric hook displayed on the archive card..." class="w-full px-3.5 py-2.5 rounded-xl bg-obsidian border border-white/15 text-sm text-alabaster focus:outline-none focus:border-prismViolet" />
+            </div>
+            <div class="sm:col-span-3">
+              <label for="new-entry-body" class="block font-mono text-[10px] uppercase tracking-widest text-stoneMuted mb-1.5">Full Entry Text (Separate paragraphs with blank lines)</label>
+              <textarea id="new-entry-body" rows="4" placeholder="Write your entry here..." class="w-full px-3.5 py-2.5 rounded-xl bg-obsidian border border-white/15 text-sm text-alabaster focus:outline-none focus:border-prismRose"></textarea>
+            </div>
+          </div>
+
+          <div class="mt-4 flex justify-end">
+            <button id="creator-add-entry-btn" class="px-5 py-2.5 rounded-full bg-gradient-to-r from-prismRose to-prismAmber text-obsidian font-mono text-xs font-semibold tracking-wider hover:opacity-95 transition">
+              + Publish Entry to Archive
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       READER SHEET MODAL (Dimly-Lit Literary Reader for Archive Entries)
+       ===================================================================== -->
+  <div id="reader-modal" class="fixed inset-0 z-[100] bg-obsidian/88 backdrop-blur-2xl hidden items-center justify-center p-3 sm:p-6" role="dialog" aria-modal="true" aria-label="Entry Reader">
+    <div id="reader-card" class="relative w-full max-w-2xl max-h-[90vh] bg-darkroom border border-white/15 rounded-3xl shadow-2xl flex flex-col overflow-hidden">
+      <!-- Top Spectrum Accent Bar -->
+      <div id="modal-accent-bar" class="h-1 w-full prism-bar shrink-0"></div>
+
+      <!-- Modal Header -->
+      <div class="px-5 sm:px-8 pt-5 pb-4 border-b border-white/10 flex items-center justify-between gap-3 shrink-0">
+        <div class="flex items-center gap-2.5">
+          <span id="modal-heat-badge" class="px-2.5 py-1 rounded-full font-mono text-[10px] tracking-widest uppercase border border-white/15">03° · SLOW BURN</span>
+          <span id="modal-read-time" class="font-mono text-[11px] text-stoneMuted">2 min read</span>
+        </div>
+        <button id="modal-close-btn" class="px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 font-mono text-[11px] text-alabaster transition">
+          close [esc]
+        </button>
+      </div>
+
+      <!-- Modal Prose Content -->
+      <div class="custom-scroll px-5 sm:px-8 py-6 sm:py-8 overflow-y-auto flex-1 space-y-5">
+        <p id="modal-num" class="font-mono text-[11px] tracking-[0.25em] uppercase text-stoneMuted">ENTRY 01</p>
+        <h3 id="modal-title" class="font-serif text-3xl sm:text-5xl text-alabaster leading-[1.05]">Entry Title</h3>
+        <p id="modal-excerpt" class="font-serif italic text-lg sm:text-xl text-alabaster/70 border-l-2 border-white/20 pl-4">Teaser quote...</p>
+        <div id="modal-body" class="space-y-4 font-sans text-sm sm:text-base text-alabaster/85 leading-relaxed pt-2">
+          <!-- Paragraphs rendered by JS -->
+        </div>
+        <p class="pt-4 font-mono text-xs text-stoneMuted">— <span data-bind="author-lower">ravenclaw</span></p>
+      </div>
+
+      <!-- Modal Footer Prev / Next Navigation -->
+      <div class="px-5 sm:px-8 py-4 border-t border-white/10 bg-obsidian/50 flex items-center justify-between gap-2 shrink-0">
+        <button id="modal-prev-btn" class="px-4 py-2 rounded-full bg-white/5 hover:bg-white/15 border border-white/10 font-mono text-xs text-alabaster transition">
+          ← prev entry
+        </button>
+        <button id="modal-next-btn" class="px-4 py-2 rounded-full bg-white/5 hover:bg-white/15 border border-white/10 font-mono text-xs text-alabaster transition">
+          next entry →
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Custom Non-Blocking Toast Notification (Replaces alert) -->
+  <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[120] px-4 py-2.5 rounded-full bg-alabaster text-obsidian font-mono text-xs tracking-wide shadow-2xl opacity-0 pointer-events-none translate-y-3 transition-all duration-300">
+    Notification
+  </div>
+
+  <!-- =====================================================================
+       DUAL-LAYER SCROLLYTELLING ENGINE & APPLICATION LOGIC
+       ===================================================================== -->
+  <script>
+    (function () {
+      'use strict';
+
+      /* -------------------------------------------------------------------
+         1. CALIBRATED HEAT TIERS & DEFAULT CONTENT STATE
+         ------------------------------------------------------------------- */
+      const HEAT_TIERS = [
+        {
+          level: 1,
+          code: '01°',
+          name: 'QUIET',
+          color: '#38bdf8',
+          rgba: 'rgba(56, 189, 248, 0.22)',
+          desc: '“What you admit to yourself at 2 AM.”',
+          group: 'simmer',
+        },
+        {
+          level: 2,
+          code: '02°',
+          name: 'WARM',
+          color: '#a855f7',
+          rgba: 'rgba(168, 85, 247, 0.22)',
+          desc: '“The unspoken tension in the room.”',
+          group: 'simmer',
+        },
+        {
+          level: 3,
+          code: '03°',
+          name: 'SLOW BURN',
+          color: '#f43f5e',
+          rgba: 'rgba(244, 63, 94, 0.24)',
+          desc: '“Desire, friction, and the parts edited out.”',
+          group: 'burn',
+        },
+        {
+          level: 4,
+          code: '04°',
+          name: 'FEVER',
+          color: '#fc4109',
+          rgba: 'rgba(252, 65, 9, 0.26)',
+          desc: '“No polite framing. No alibis.”',
+          group: 'burn',
+        },
+        {
+          level: 5,
+          code: '05°',
+          name: 'INCANDESCENT',
+          color: '#f59e0b',
+          rgba: 'rgba(245, 158, 11, 0.28)',
+          desc: '“Unredacted. Read with the door shut.”',
+          group: 'incandescent',
+        },
+      ];
+
+      const CHAPTERS = [
+        { id: 0, label: '00 · DARKROOM', title: 'The Darkroom', range: [0.0, 0.19], target: 0.0, defaultHeat: 1 },
+        { id: 1, label: '01 · THE PRISM', title: 'The Prism Engine', range: [0.19, 0.41], target: 0.29, defaultHeat: 2 },
+        { id: 2, label: '02 · HEAT SCALE', title: 'The Heat Scale', range: [0.41, 0.63], target: 0.52, defaultHeat: 3 },
+        { id: 3, label: '03 · THE ARCHIVE', title: 'The Private Archive', range: [0.63, 0.85], target: 0.74, defaultHeat: 4 },
+        { id: 4, label: '04 · READ & EXPORT', title: 'Finale & Export', range: [0.85, 1.0], target: 0.98, defaultHeat: 5 },
+      ];
+
+      const DEFAULT_STATE = {
+        title: 'Private Parts',
+        author: 'Ravenclaw',
+        quotes: [
+          'a prism for the things said after midnight.',
+          'not a feed. not a performance. not sanitized.',
+          'refracted by ravenclaw.',
+        ],
+        entries: [
+          {
+            id: 'entry-1',
+            num: '01',
+            title: 'Inventory of Things I Didn’t Send',
+            heat: 1,
+            readTime: '2 min read',
+            excerpt: 'Every drafts folder is an accidental autobiography of who we almost became.',
+            body: [
+              'At 2:14 AM, honesty has a strange weightlessness. You type four sentences that could rearrange an entire month, stare at the cursor blinking like a lighthouse, and then backspace them down to a single polite emoji.',
+              'We talk about curation as if it happens in public. The real curation happens in the seconds before our thumb lifts off the glass. What stays unsent does not disappear; it settles into the floorboards of how we look at someone the next morning.',
+              'This archive starts there—with the quiet ledger of sentences that deserved oxygen even when daylight voted them down.',
+            ],
+          },
+          {
+            id: 'entry-2',
+            num: '02',
+            title: 'Two Glasses, One Narrow Table',
+            heat: 2,
+            readTime: '2 min read',
+            excerpt: 'On the exact geometry of a conversation that says one thing while the air says another.',
+            body: [
+              'There is a specific decibel level in a crowded room where two people stop speaking for the room and start speaking only for the six inches between their elbows.',
+              'Nobody crosses a line. Nobody needs to. The whole charge lives in the timing—how long a gaze stays parked after a joke lands, the slight tilt of a wrist turning a coaster in slow circles.',
+              'Polite language calls this chemistry. Precision calls it an agreement neither party is ready to sign out loud.',
+            ],
+          },
+          {
+            id: 'entry-3',
+            num: '03',
+            title: 'The Version We Cut Before Print',
+            heat: 3,
+            readTime: '3 min read',
+            excerpt: 'Every smooth persona hides a rougher draft with far better pacing and sharper teeth.',
+            body: [
+              'Notice how almost everything published online sounds like it was reviewed by a nervous committee. Soft edges. Pre-emptive disclaimers. Apologies wrapped around appetites.',
+              'When you sand down every contradiction until nothing can bruise a stranger, you also sand off the exact friction that makes another human lean forward and think: wait—you too?',
+              'Slow burn isn’t about volume. It is about refusing to blink first when the paragraph gets uncomfortable.',
+            ],
+          },
+          {
+            id: 'entry-4',
+            num: '04',
+            title: 'No Alibis After Midnight',
+            heat: 4,
+            readTime: '3 min read',
+            excerpt: 'What happens to a room the moment you stop decorating your real motive.',
+            body: [
+              'Half of modern intimacy is theater conducted through plausible deniability. We ask a question hoping someone hears the secret question tucked beneath it. We linger by the door pretending to check the weather.',
+              'Fever starts the second the alibi drops. When you look straight across the dim light and name the thing plainly, without irony as a fire escape.',
+              'It is terrifying for three seconds. After that, the air finally becomes breathable.',
+            ],
+          },
+          {
+            id: 'entry-5',
+            num: '05',
+            title: 'Read With the Door Shut',
+            heat: 5,
+            readTime: '3 min read',
+            excerpt: 'The unredacted manifesto of wanting deeply, privately, and without a single apology.',
+            body: [
+              'Incandescent light does not ask whether you are ready to be seen. It strips the lacquer off polite excuses and reveals the grain underneath—every pulse, every hunger, every private contradiction we lock behind passwords.',
+              'To keep a private part of yourself intact is not secrecy for the sake of shame. It is sovereignty. It is deciding that some rooms are strictly by invitation, lit on your own dimmer switch.',
+              'If you made it to degree five, close the tabs you don’t need. Sit with the sentence that made your chest tighten. That one is yours.',
+            ],
+          },
+        ],
+      };
+
+      const STORAGE_KEY = 'private_parts_prism_state_v1';
+      let appState = loadState();
+      let activeStageFilter = 'all';
+      let activeDrawerFilter = 'all';
+      let currentModalEntryIndex = 0;
+      let isWatching = false;
+      let isReadMode = false;
+      let isDrawerOpen = false;
+      let isModalOpen = false;
+
+      // Smooth Lerp Scroll State
+      let targetProgress = 0;
+      let displayProgress = 0;
+      let currentChapterIndex = 0;
+      let currentHeatLevel = 1;
+      let pointerX = 0;
+      let pointerY = 0;
+
+      /* -------------------------------------------------------------------
+         2. DOM ELEMENT REFERENCES
+         ------------------------------------------------------------------- */
+      const el = {
+        body: document.body,
+        preloader: document.getElementById('preloader'),
+        stage: document.getElementById('stage'),
+        stageAmbient: document.getElementById('stage-ambient'),
+        scrollTrack: document.getElementById('scroll-track'),
+        progressBar: document.getElementById('progress-bar'),
+        toast: document.getElementById('toast'),
+
+        // HUD
+        hudHomeBtn: document.getElementById('hud-home-btn'),
+        hudFileBtn: document.getElementById('hud-file-btn'),
+        hudFilename: document.getElementById('hud-filename'),
+        hudCrumb: document.getElementById('hud-crumb'),
+        hudHeatBtn: document.getElementById('hud-heat-btn'),
+        hudHeatLabel: document.getElementById('hud-heat-label'),
+        hudHeatBars: document.getElementById('hud-heat-bars'),
+        hudWatchBtn: document.getElementById('hud-watch-btn'),
+        hudWatchDot: document.getElementById('hud-watch-dot'),
+        hudWatchText: document.getElementById('hud-watch-text'),
+        hudIndexBtn: document.getElementById('hud-index-btn'),
+        hudEyePupil: document.getElementById('hud-eye-pupil'),
+
+        // Scenes
+        s0: document.getElementById('scene-0'),
+        s0Wall: document.getElementById('s0-wall'),
+        s0Floor: document.getElementById('s0-floor'),
+        s0PrismWrap: document.getElementById('s0-prism-wrap'),
+        s0Rays: document.getElementById('s0-rays'),
+        s0GlassTri: document.getElementById('s0-glass-tri'),
+        s0TitleWrap: document.getElementById('s0-title-wrap'),
+        s0Word1: document.getElementById('s0-word-1'),
+        s0Word2: document.getElementById('s0-word-2'),
+        s0Diamond: document.getElementById('s0-diamond'),
+        s0Quotes: document.getElementById('s0-quotes'),
+        s0MetaTop: document.getElementById('s0-meta-top'),
+        s0ScrollHint: document.getElementById('s0-scroll-hint'),
+
+        s1: document.getElementById('scene-1'),
+        engOuter: document.getElementById('eng-outer-ring'),
+        engMid: document.getElementById('eng-mid-facets'),
+        engInner: document.getElementById('eng-inner-core'),
+        engArm: document.getElementById('eng-arm'),
+        s1BeatA: document.getElementById('s1-beat-a'),
+        s1BeatB: document.getElementById('s1-beat-b'),
+        s1BeatC: document.getElementById('s1-beat-c'),
+        s1DotA: document.getElementById('s1-dot-a'),
+        s1DotB: document.getElementById('s1-dot-b'),
+        s1Strike1: document.getElementById('s1-strike-1'),
+        s1Strike2: document.getElementById('s1-strike-2'),
+        s1Strike3: document.getElementById('s1-strike-3'),
+
+        s2: document.getElementById('scene-2'),
+        s2ThermalWash: document.getElementById('s2-thermal-wash'),
+        s2MdHash: document.getElementById('s2-md-hash'),
+        s2GaugeArc: document.getElementById('s2-gauge-arc'),
+        s2DegreeNum: document.getElementById('s2-degree-num'),
+        s2TierName: document.getElementById('s2-tier-name'),
+        s2TierDesc: document.getElementById('s2-tier-desc'),
+        s2RailFill: document.getElementById('s2-rail-fill'),
+        s2TierPills: document.getElementById('s2-tier-pills'),
+
+        s3: document.getElementById('scene-3'),
+        s3Cam: document.getElementById('s3-cam'),
+        s3Filters: document.getElementById('s3-filters'),
+        s3CardsGrid: document.getElementById('s3-cards-grid'),
+
+        s4: document.getElementById('scene-4'),
+        finReadBtn: document.getElementById('fin-read-btn'),
+        finDownloadBtn: document.getElementById('fin-download-btn'),
+        finCreatorBtn: document.getElementById('fin-creator-btn'),
+        finReplayBtn: document.getElementById('fin-replay-btn'),
+
+        // Plain-Text Read Overlay
+        readOverlay: document.getElementById('read-overlay'),
+        readArticle: document.getElementById('read'),
+        readCopyBtn: document.getElementById('read-copy-btn'),
+        readDownloadBtn: document.getElementById('read-download-btn'),
+        readCloseBtn: document.getElementById('read-close-btn'),
+        skipToRead: document.getElementById('skip-to-read'),
+
+        // Index & Creator Drawer
+        indexDrawer: document.getElementById('index-drawer'),
+        indexCloseBtn: document.getElementById('index-close-btn'),
+        tabChaptersBtn: document.getElementById('tab-chapters-btn'),
+        tabCreatorBtn: document.getElementById('tab-creator-btn'),
+        panelChapters: document.getElementById('drawer-panel-chapters'),
+        panelCreator: document.getElementById('drawer-panel-creator'),
+        drawerChaptersGrid: document.getElementById('drawer-chapters-grid'),
+        drawerFilters: document.getElementById('drawer-filters'),
+        drawerEntriesList: document.getElementById('drawer-entries-list'),
+        drawerReadBtn: document.getElementById('drawer-read-btn'),
+        drawerDownloadBtn: document.getElementById('drawer-download-btn'),
+
+        // Creator Form Fields
+        edTitle: document.getElementById('ed-title'),
+        edAuthor: document.getElementById('ed-author'),
+        edQ1: document.getElementById('ed-q1'),
+        edQ2: document.getElementById('ed-q2'),
+        edQ3: document.getElementById('ed-q3'),
+        creatorSaveMetaBtn: document.getElementById('creator-save-meta-btn'),
+        creatorResetBtn: document.getElementById('creator-reset-btn'),
+        newEntryTitle: document.getElementById('new-entry-title'),
+        newEntryHeat: document.getElementById('new-entry-heat'),
+        newEntryExcerpt: document.getElementById('new-entry-excerpt'),
+        newEntryBody: document.getElementById('new-entry-body'),
+        creatorAddEntryBtn: document.getElementById('creator-add-entry-btn'),
+
+        // Reader Sheet Modal
+        readerModal: document.getElementById('reader-modal'),
+        modalAccentBar: document.getElementById('modal-accent-bar'),
+        modalHeatBadge: document.getElementById('modal-heat-badge'),
+        modalReadTime: document.getElementById('modal-read-time'),
+        modalCloseBtn: document.getElementById('modal-close-btn'),
+        modalNum: document.getElementById('modal-num'),
+        modalTitle: document.getElementById('modal-title'),
+        modalExcerpt: document.getElementById('modal-excerpt'),
+        modalBody: document.getElementById('modal-body'),
+        modalPrevBtn: document.getElementById('modal-prev-btn'),
+        modalNextBtn: document.getElementById('modal-next-btn'),
+      };
+
+      /* -------------------------------------------------------------------
+         3. STATE PERSISTENCE & UTILITY HELPERS
+         ------------------------------------------------------------------- */
+      function loadState() {
+        try {
+          const saved = localStorage.getItem(STORAGE_KEY);
+          if (saved) {
+            const parsed = JSON.parse(saved);
+            if (parsed && parsed.title && Array.isArray(parsed.entries)) {
+              return parsed;
+            }
+          }
+        } catch (err) {
+          // Safe fallback if storage is blocked in sandboxed iframe
+        }
+        return JSON.parse(JSON.stringify(DEFAULT_STATE));
+      }
+
+      function saveState() {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+        } catch (err) {
+          // Ignore storage quota / iframe restrictions silently
+        }
+      }
+
+      function clamp(val, min, max) {
+        return Math.min(Math.max(val, min), max);
+      }
+
+      function mapRange(val, inMin, inMax) {
+        return clamp((val - inMin) / (inMax - inMin), 0, 1);
+      }
+
+      function easeOutCubic(t) {
+        return 1 - Math.pow(1 - t, 3);
+      }
+
+      function getTier(level) {
+        return HEAT_TIERS[clamp(level - 1, 0, 4)];
+      }
+
+      function escapeHtml(str) {
+        return String(str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      let toastTimer = null;
+      function showToast(msg) {
+        el.toast.textContent = msg;
+        el.toast.classList.remove('opacity-0', 'translate-y-3');
+        el.toast.classList.add('opacity-100', 'translate-y-0');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => {
+          el.toast.classList.add('opacity-0', 'translate-y-3');
+          el.toast.classList.remove('opacity-100', 'translate-y-0');
+        }, 2600);
+      }
+
+      function getFilename() {
+        const slug = appState.title.trim().toUpperCase().replace(/[^A-Z0-9]+/g, '_') || 'PRIVATE_PARTS';
+        return `${slug}.md`;
+      }
+
+      /* -------------------------------------------------------------------
+         4. DYNAMIC CONTENT RENDERING (Identity, Tiers, Archive, Markdown)
+         ------------------------------------------------------------------- */
+      function syncIdentityBindings() {
+        const parts = appState.title.trim().split(/\s+/);
+        const firstWord = parts[0] || 'PRIVATE';
+        const restWords = parts.slice(1).join(' ') || 'PARTS';
+
+        el.s0Word1.textContent = firstWord.toUpperCase();
+        el.s0Word2.textContent = restWords.toUpperCase();
+        document.title = `${appState.title.toUpperCase()} — ${appState.author}`;
+        el.hudFilename.textContent = getFilename();
+
+        document.querySelectorAll('[data-bind="author-upper"]').forEach(node => {
+          node.textContent = appState.author.toUpperCase();
+        });
+        document.querySelectorAll('[data-bind="author-lower"]').forEach(node => {
+          node.textContent = appState.author.toLowerCase();
+        });
+        document.querySelectorAll('[data-bind="quote-1"]').forEach(n => n.textContent = appState.quotes[0] || '');
+        document.querySelectorAll('[data-bind="quote-2"]').forEach(n => n.textContent = appState.quotes[1] || '');
+        document.querySelectorAll('[data-bind="quote-3"]').forEach(n => n.textContent = appState.quotes[2] || '');
+
+        // Populate Creator Inputs
+        el.edTitle.value = appState.title;
+        el.edAuthor.value = appState.author;
+        el.edQ1.value = appState.quotes[0] || '';
+        el.edQ2.value = appState.quotes[1] || '';
+        el.edQ3.value = appState.quotes[2] || '';
+      }
+
+      function renderHeatTierPills() {
+        el.s2TierPills.innerHTML = HEAT_TIERS.map((t, idx) => `
+          <button data-jump-heat="${t.level}"
+            class="heat-step-pill group flex flex-col items-center justify-center py-2.5 px-1 rounded-2xl border border-white/10 bg-darkroom/70 hover:border-white/30 transition-all duration-300">
+            <span class="font-mono text-xs sm:text-sm font-semibold" style="color:${t.color}">${t.code}</span>
+            <span class="font-mono text-[8px] sm:text-[10px] tracking-wider uppercase text-stoneMuted group-hover:text-alabaster mt-0.5 truncate max-w-full">${t.name}</span>
+          </button>
+        `).join('');
+
+        // Clicking a heat tier pill smoothly scrolls directly to that tier's position in Scene 2
+        el.s2TierPills.querySelectorAll('[data-jump-heat]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const lvl = Number(btn.getAttribute('data-jump-heat'));
+            // Scene 2 spans 0.43 to 0.62 -> map 1..5 cleanly
+            const targetP = 0.44 + ((lvl - 1) / 4) * 0.16;
+            stopWatch();
+            scrollToProgress(targetP);
+          });
+        });
+      }
+
+      function filterEntriesList(filterType) {
+        if (filterType === 'all') return appState.entries;
+        return appState.entries.filter(entry => getTier(entry.heat).group === filterType);
+      }
+
+      function buildThermalMiniBars(level, color) {
+        let html = '<span class="inline-flex items-end gap-[2px] h-3">';
+        for (let i = 1; i <= 5; i++) {
+          const active = i <= level;
+          const h = 4 + i * 1.8;
+          html += `<i style="height:${h}px; background:${active ? color : 'rgba(255,255,255,0.14)'}" class="block w-[2.5px] rounded-full"></i>`;
+        }
+        html += '</span>';
+        return html;
+      }
+
+      function renderStageArchiveCards() {
+        const list = filterEntriesList(activeStageFilter);
+        if (!list.length) {
+          el.s3CardsGrid.innerHTML = `
+            <div class="col-span-full py-12 text-center rounded-2xl border border-white/10 bg-darkroom/60">
+              <p class="font-mono text-xs text-stoneMuted">No entries at this heat tier yet. Add one in Creator Mode.</p>
+            </div>`;
+          return;
+        }
+
+        el.s3CardsGrid.innerHTML = list.map(entry => {
+          const tier = getTier(entry.heat);
+          return `
+            <button data-open-entry="${escapeHtml(entry.id)}"
+              class="group text-left relative rounded-2xl bg-darkroom/80 hover:bg-darkroom border border-white/10 hover:border-white/25 p-4 sm:p-5 transition-all duration-300 flex flex-col justify-between gap-3 overflow-hidden shadow-xl">
+              <!-- Subtle Top Heat Glow Hairline -->
+              <span class="absolute top-0 inset-x-0 h-[2px] opacity-60 group-hover:opacity-100 transition-opacity" style="background:${tier.color}"></span>
+
+              <div>
+                <div class="flex items-center justify-between gap-2 mb-2.5">
+                  <span class="font-mono text-[10px] tracking-[0.2em] uppercase text-stoneMuted">ENTRY ${escapeHtml(entry.num)}</span>
+                  <span class="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-obsidian/80 border border-white/10 font-mono text-[10px]" style="color:${tier.color}">
+                    <span>${tier.code} ${tier.name}</span>
+                    ${buildThermalMiniBars(tier.level, tier.color)}
+                  </span>
+                </div>
+
+                <h3 class="font-serif text-2xl sm:text-[1.65rem] leading-tight text-alabaster group-hover:text-white transition-colors">
+                  ${escapeHtml(entry.title)}
+                </h3>
+                <p class="mt-2 font-sans text-xs sm:text-[13px] text-stoneMuted line-clamp-2 leading-relaxed">
+                  ${escapeHtml(entry.excerpt)}
+                </p>
+              </div>
+
+              <div class="pt-2 border-t border-white/[0.06] flex items-center justify-between font-mono text-[10px] text-stoneMuted">
+                <span>${escapeHtml(entry.readTime)}</span>
+                <span class="text-alabaster/70 group-hover:translate-x-1 transition-transform">read entry →</span>
+              </div>
+            </button>
+          `;
+        }).join('');
+
+        el.s3CardsGrid.querySelectorAll('[data-open-entry]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const id = btn.getAttribute('data-open-entry');
+            const idx = appState.entries.findIndex(e => e.id === id);
+            if (idx !== -1) openReaderModal(idx);
+          });
+        });
+      }
+
+      function renderDrawerContent() {
+        // Chapter Cards
+        el.drawerChaptersGrid.innerHTML = CHAPTERS.map(ch => {
+          const tier = getTier(ch.defaultHeat);
+          const isCurrent = ch.id === currentChapterIndex;
+          return `
+            <button data-jump-chapter="${ch.target}"
+              class="text-left p-3.5 rounded-2xl border transition-all ${isCurrent ? 'bg-white/10 border-white/30' : 'bg-darkroom/70 border-white/10 hover:border-white/25'}">
+              <div class="flex items-center justify-between mb-2">
+                <span class="font-mono text-[10px] tracking-widest text-stoneMuted">0${ch.id}</span>
+                <span class="w-2 h-2 rounded-full" style="background:${tier.color}"></span>
+              </div>
+              <p class="font-serif text-xl text-alabaster leading-tight">${ch.title}</p>
+              <p class="font-mono text-[10px] text-stoneMuted mt-1">${tier.code} ${tier.name}</p>
+            </button>
+          `;
+        }).join('');
+
+        el.drawerChaptersGrid.querySelectorAll('[data-jump-chapter]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const target = parseFloat(btn.getAttribute('data-jump-chapter'));
+            closeDrawer();
+            stopWatch();
+            scrollToProgress(target);
+          });
+        });
+
+        // Drawer Filtered Entries
+        const list = filterEntriesList(activeDrawerFilter);
+        el.drawerEntriesList.innerHTML = list.map(entry => {
+          const tier = getTier(entry.heat);
+          return `
+            <button data-drawer-open="${escapeHtml(entry.id)}"
+              class="text-left p-4 rounded-2xl bg-darkroom/80 hover:bg-darkroom border border-white/10 hover:border-white/25 transition flex items-start justify-between gap-3">
+              <div>
+                <p class="font-mono text-[10px] uppercase tracking-widest mb-1" style="color:${tier.color}">${tier.code} · ${tier.name}</p>
+                <h4 class="font-serif text-2xl text-alabaster leading-tight">${escapeHtml(entry.title)}</h4>
+                <p class="text-xs text-stoneMuted mt-1 line-clamp-1">${escapeHtml(entry.excerpt)}</p>
+              </div>
+              <span class="font-mono text-xs text-stoneMuted shrink-0 mt-1">→</span>
+            </button>
+          `;
+        }).join('');
+
+        el.drawerEntriesList.querySelectorAll('[data-drawer-open]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const id = btn.getAttribute('data-drawer-open');
+            const idx = appState.entries.findIndex(e => e.id === id);
+            closeDrawer();
+            if (idx !== -1) openReaderModal(idx);
+          });
+        });
+      }
+
+      function generateMarkdownString() {
+        const lines = [
+          `# ${appState.title.toUpperCase()}`,
+          `> ${appState.quotes[0] || ''}`,
+          `> ${appState.quotes[1] || ''}`,
+          `> ${appState.quotes[2] || ''}`,
+          ``,
+          `By **${appState.author}** · Edition 01 (Prism)`,
+          ``,
+          `---`,
+          ``,
+          `## 01 · the prism engine`,
+          ``,
+          `Surface is a mask. Every truth splits under light.`,
+          `Raw. Sharp. Private.`,
+          ``,
+          `## 02 · the heat rating`,
+          ``,
+          ...HEAT_TIERS.map(t => `- **${t.code} ${t.name}** — ${t.desc.replace(/[“”]/g, '')}`),
+          ``,
+          `## 03 · the private archive`,
+          ``,
+        ];
+
+        appState.entries.forEach(entry => {
+          const tier = getTier(entry.heat);
+          lines.push(`### ${entry.num}. ${entry.title} [${tier.code} ${tier.name}]`);
+          lines.push(`*${entry.excerpt}*`);
+          lines.push(``);
+          entry.body.forEach(p => {
+            lines.push(p);
+            lines.push(``);
+          });
+        });
+
+        lines.push(`---`);
+        lines.push(`— ${appState.author.toLowerCase()}, last refracted after midnight.`);
+        return lines.join('\n');
+      }
+
+      function renderPlainTextArticle() {
+        el.readArticle.innerHTML = `
+          <header class="space-y-4 border-b border-white/10 pb-8">
+            <p class="font-mono text-xs tracking-[0.22em] uppercase text-stoneMuted">${escapeHtml(appState.author.toUpperCase())} · EDITION 01 · PRISM</p>
+            <h1 class="font-serif text-5xl sm:text-6xl text-alabaster">${escapeHtml(appState.title.toUpperCase())}</h1>
+            <blockquote class="border-l-2 border-prismRose/70 pl-4 space-y-1 font-mono text-xs sm:text-sm text-alabaster/75">
+              ${appState.quotes.map(q => `<p>&gt; ${escapeHtml(q)}</p>`).join('')}
+            </blockquote>
+          </header>
+
+          <section class="space-y-3">
+            <h2 class="font-mono text-xs uppercase tracking-[0.2em] text-prismViolet">## 01 · the prism engine</h2>
+            <p class="font-serif text-2xl sm:text-3xl text-alabaster">Surface is a mask. Every truth splits under light.</p>
+            <p class="text-alabaster/80">Everyone edits themselves for daylight. Pass a polite sentence through optical glass and you see the pulse hidden inside it. Raw. Sharp. Private.</p>
+          </section>
+
+          <section class="space-y-3">
+            <h2 class="font-mono text-xs uppercase tracking-[0.2em] text-prismCyan">## 02 · the heat scale</h2>
+            <ul class="space-y-2">
+              ${HEAT_TIERS.map(t => `
+                <li class="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-3 text-sm">
+                  <span class="font-mono font-semibold shrink-0" style="color:${t.color}">${t.code} · ${t.name}</span>
+                  <span class="text-alabaster/75">${escapeHtml(t.desc)}</span>
+                </li>
+              `).join('')}
+            </ul>
+          </section>
+
+          <section class="space-y-8 pt-2">
+            <h2 class="font-mono text-xs uppercase tracking-[0.2em] text-prismRose">## 03 · the private archive</h2>
+            ${appState.entries.map(entry => {
+              const tier = getTier(entry.heat);
+              return `
+                <div class="space-y-3 pb-6 border-b border-white/[0.07]">
+                  <div class="flex flex-wrap items-center gap-2">
+                    <span class="font-mono text-[11px] px-2.5 py-0.5 rounded-full border border-white/15" style="color:${tier.color}">${tier.code} ${tier.name}</span>
+                    <span class="font-mono text-[11px] text-stoneMuted">${escapeHtml(entry.readTime)}</span>
+                  </div>
+                  <h3 class="font-serif text-3xl text-alabaster">${escapeHtml(entry.num)}. ${escapeHtml(entry.title)}</h3>
+                  <p class="font-serif italic text-lg text-alabaster/70">${escapeHtml(entry.excerpt)}</p>
+                  ${entry.body.map(p => `<p class="text-alabaster/85 text-sm sm:text-base leading-relaxed">${escapeHtml(p)}</p>`).join('')}
+                </div>
+              `;
+            }).join('')}
+          </section>
+
+          <footer class="pt-4 font-mono text-xs text-stoneMuted">
+            — ${escapeHtml(appState.author.toLowerCase())}, last refracted after midnight.
+          </footer>
+        `;
+      }
+
+      function refreshAllViews() {
+        syncIdentityBindings();
+        renderStageArchiveCards();
+        renderDrawerContent();
+        renderPlainTextArticle();
+      }
+
+      /* -------------------------------------------------------------------
+         5. HUD TELEMETRY & HEAT METER UPDATER
+         ------------------------------------------------------------------- */
+      function updateHeatHUD(level) {
+        const clamped = clamp(Math.round(level), 1, 5);
+        if (clamped === currentHeatLevel && el.hudHeatLabel.dataset.init) return;
+        currentHeatLevel = clamped;
+        el.hudHeatLabel.dataset.init = '1';
+
+        const tier = getTier(clamped);
+        el.hudHeatLabel.textContent = `HEAT ${tier.code}`;
+        el.hudHeatLabel.style.color = tier.color;
+        el.hudHeatBtn.style.borderColor = `${tier.color}55`;
+
+        const bars = el.hudHeatBars.querySelectorAll('i');
+        bars.forEach((bar, idx) => {
+          const isActive = idx < clamped;
+          const barTier = HEAT_TIERS[idx];
+          bar.style.backgroundColor = isActive ? barTier.color : 'rgba(255,255,255,0.14)';
+          bar.style.boxShadow = isActive ? `0 0 8px ${barTier.color}` : 'none';
+          bar.style.transform = isActive ? 'scaleY(1.08)' : 'scaleY(0.85)';
+        });
+      }
+
+      function updateChapterCrumb(idx) {
+        if (idx === currentChapterIndex && el.hudCrumb.dataset.init) return;
+        currentChapterIndex = idx;
+        el.hudCrumb.dataset.init = '1';
+        el.hudCrumb.style.opacity = '0';
+        setTimeout(() => {
+          el.hudCrumb.textContent = CHAPTERS[idx].label;
+          el.hudCrumb.style.opacity = '1';
+        }, 140);
+      }
+
+      /* -------------------------------------------------------------------
+         6. CINEMATIC SCENE CHOREOGRAPHY (Scrubbed by Smooth Progress 0..1)
+         ------------------------------------------------------------------- */
+      function renderChoreography(p) {
+        // Bottom Prismatic Progress Bar
+        el.progressBar.style.width = `${(p * 100).toFixed(3)}%`;
+
+        // Determine Active Chapter
+        let activeCh = 0;
+        for (let i = 0; i < CHAPTERS.length; i++) {
+          if (p >= CHAPTERS[i].range[0]) activeCh = i;
+        }
+        updateChapterCrumb(activeCh);
+
+        // Compute Live Heat Level based on current scroll scene
+        let computedHeat = CHAPTERS[activeCh].defaultHeat;
+        if (p >= 0.41 && p <= 0.65) {
+          const heatProg = mapRange(p, 0.43, 0.61);
+          computedHeat = 1 + Math.round(heatProg * 4);
+        }
+        updateHeatHUD(computedHeat);
+
+        // Subtle Prism-Eye tracking
+        el.hudEyePupil.style.transformOrigin = '18px 18px';
+        el.hudEyePupil.style.transform = `translate(${pointerX * 2.2}px, ${pointerY * 1.6}px)`;
+
+        /* -----------------------------------------------------------------
+           SCENE 0: THE DARKROOM (0.00 -> 0.21)
+           ----------------------------------------------------------------- */
+        const s0Exit = easeOutCubic(mapRange(p, 0.11, 0.21));
+        const s0Opacity = 1 - mapRange(p, 0.14, 0.21);
+        el.s0.style.opacity = s0Opacity.toFixed(3);
+        el.s0.style.pointerEvents = s0Opacity > 0.35 ? 'auto' : 'none';
+
+        if (s0Opacity > 0.005) {
+          // Architectural set strikes apart: wall lifts up, floor drops away
+          el.s0Wall.style.transform = `translateY(${(-s0Exit * 45).toFixed(2)}%)`;
+          el.s0Floor.style.transform = `translateY(${(s0Exit * 65).toFixed(2)}%)`;
+
+          // Prism expands & fans out rays dramatically + subtle cursor parallax
+          const prismScale = 1 + s0Exit * 0.42;
+          const raySpreadY = 1 + s0Exit * 0.85;
+          el.s0PrismWrap.style.transform = `translate3d(${(pointerX * 10).toFixed(1)}px, ${(-s0Exit * 48 + pointerY * 6).toFixed(1)}px, 0) scale(${prismScale.toFixed(3)})`;
+          el.s0Rays.style.transformOrigin = '436px 132px';
+          el.s0Rays.style.transform = `scaleY(${raySpreadY.toFixed(3)}) rotate(${(pointerY * 2.2 - s0Exit * 5).toFixed(2)}deg)`;
+
+          // Title words part smoothly like curtains
+          el.s0Word1.style.transform = `translateX(${(-s0Exit * 68).toFixed(1)}px)`;
+          el.s0Word2.style.transform = `translateX(${(s0Exit * 68).toFixed(1)}px)`;
+          el.s0Diamond.style.transform = `rotate(${45 + s0Exit * 180}deg) scale(${(1 + s0Exit * 0.6).toFixed(2)})`;
+          el.s0Quotes.style.transform = `translateY(${(s0Exit * 42).toFixed(1)}px)`;
+          el.s0Quotes.style.opacity = (1 - mapRange(p, 0.08, 0.16)).toFixed(3);
+          el.s0ScrollHint.style.opacity = (1 - mapRange(p, 0.02, 0.09)).toFixed(3);
+        }
+
+        /* -----------------------------------------------------------------
+           SCENE 1: THE PRISM ENGINE (0.18 -> 0.43)
+           ----------------------------------------------------------------- */
+        const s1In = mapRange(p, 0.18, 0.23);
+        const s1Out = 1 - mapRange(p, 0.39, 0.44);
+        const s1Opacity = Math.min(s1In, s1Out);
+        el.s1.style.opacity = s1Opacity.toFixed(3);
+
+        if (s1Opacity > 0.005) {
+          const s1Prog = mapRange(p, 0.18, 0.43);
+
+          // Procedural SVG Optical Refraction Machine rotates strictly in sync with scroll
+          el.engOuter.style.transform = `rotate(${(s1Prog * 145).toFixed(2)}deg)`;
+          el.engMid.style.transform = `rotate(${(-s1Prog * 110).toFixed(2)}deg) scale(${(0.92 + s1Prog * 0.14).toFixed(3)})`;
+          el.engInner.style.transform = `rotate(${(s1Prog * 210).toFixed(2)}deg)`;
+          el.engArm.style.transform = `rotate(${(-55 + s1Prog * 260).toFixed(2)}deg)`;
+
+          // Kinetic Beat A (0.20 -> 0.28)
+          const beatAOp = Math.min(mapRange(p, 0.19, 0.23), 1 - mapRange(p, 0.265, 0.295));
+          el.s1BeatA.style.opacity = beatAOp.toFixed(3);
+          el.s1BeatA.style.transform = `translateY(${((1 - mapRange(p, 0.19, 0.24)) * 28 - mapRange(p, 0.265, 0.295) * 28).toFixed(1)}px)`;
+          const dotASnap = easeOutCubic(mapRange(p, 0.21, 0.25));
+          el.s1DotA.style.transform = `translateY(${((1 - dotASnap) * -32).toFixed(1)}px) scale(${(0.6 + dotASnap * 0.4).toFixed(2)})`;
+
+          // Kinetic Beat B (0.28 -> 0.355)
+          const beatBOp = Math.min(mapRange(p, 0.28, 0.305), 1 - mapRange(p, 0.335, 0.36));
+          el.s1BeatB.style.opacity = beatBOp.toFixed(3);
+          el.s1BeatB.style.transform = `translateY(${((1 - mapRange(p, 0.28, 0.31)) * 28 - mapRange(p, 0.335, 0.36) * 28).toFixed(1)}px)`;
+          const dotBSnap = easeOutCubic(mapRange(p, 0.29, 0.325));
+          el.s1DotB.style.transform = `translateY(${((1 - dotBSnap) * -32).toFixed(1)}px) scale(${(0.6 + dotBSnap * 0.4).toFixed(2)})`;
+
+          // Kinetic Beat C: Tri-Strike "Raw. Sharp. Private." (0.35 -> 0.42)
+          const beatCOp = Math.min(mapRange(p, 0.345, 0.365), 1 - mapRange(p, 0.40, 0.435));
+          el.s1BeatC.style.opacity = beatCOp.toFixed(3);
+
+          const st1 = mapRange(p, 0.35, 0.368);
+          const st2 = mapRange(p, 0.368, 0.386);
+          const st3 = mapRange(p, 0.386, 0.402);
+
+          el.s1Strike1.style.opacity = (0.18 + st1 * 0.82).toFixed(2);
+          el.s1Strike1.style.transform = `scale(${(0.94 + st1 * 0.06).toFixed(3)})`;
+          el.s1Strike2.style.opacity = (0.18 + st2 * 0.82).toFixed(2);
+          el.s1Strike2.style.transform = `scale(${(0.94 + st2 * 0.06).toFixed(3)})`;
+          el.s1Strike3.style.opacity = (0.18 + st3 * 0.82).toFixed(2);
+          el.s1Strike3.style.transform = `scale(${(0.94 + st3 * 0.06).toFixed(3)})`;
+        }
+
+        /* -----------------------------------------------------------------
+           SCENE 2: THE HEAT SCALE (0.41 -> 0.65)
+           ----------------------------------------------------------------- */
+        const s2In = mapRange(p, 0.41, 0.45);
+        const s2Out = 1 - mapRange(p, 0.615, 0.655);
+        const s2Opacity = Math.min(s2In, s2Out);
+        el.s2.style.opacity = s2Opacity.toFixed(3);
+        el.s2.style.pointerEvents = s2Opacity > 0.5 ? 'auto' : 'none';
+
+        if (s2Opacity > 0.005) {
+          const heatSweep = mapRange(p, 0.43, 0.61); // 0 -> 1 across the 5 tiers
+          const tierIdx = clamp(Math.floor(heatSweep * 4.999), 0, 4);
+          const tier = HEAT_TIERS[tierIdx];
+
+          // Radial SVG Arc Sweep (Circumference = 578)
+          const fillRatio = 0.2 + heatSweep * 0.8;
+          el.s2GaugeArc.style.strokeDashoffset = (578 * (1 - fillRatio)).toFixed(1);
+          el.s2RailFill.style.width = `${(fillRatio * 100).toFixed(1)}%`;
+
+          // Update Thermal Room Wash & Readout
+          el.s2ThermalWash.style.background = `radial-gradient(ellipse at 50% 45%, ${tier.rgba}, transparent 65%)`;
+          el.s2DegreeNum.textContent = tier.code;
+          el.s2TierName.textContent = tier.name;
+          el.s2TierName.style.color = tier.color;
+          el.s2MdHash.style.color = tier.color;
+          el.s2TierDesc.textContent = tier.desc;
+
+          // Highlight Active Tier Pill
+          el.s2TierPills.querySelectorAll('.heat-step-pill').forEach((pill, i) => {
+            if (i === tierIdx) {
+              pill.style.borderColor = tier.color;
+              pill.style.backgroundColor = 'rgba(255,255,255,0.08)';
+              pill.style.transform = 'translateY(-3px)';
+            } else {
+              pill.style.borderColor = 'rgba(255,255,255,0.08)';
+              pill.style.backgroundColor = 'rgba(26,22,28,0.65)';
+              pill.style.transform = 'translateY(0)';
+            }
+          });
+        }
+
+        /* -----------------------------------------------------------------
+           SCENE 3: THE ARCHIVE TABLE (0.63 -> 0.87)
+           ----------------------------------------------------------------- */
+        const s3In = mapRange(p, 0.63, 0.675);
+        const s3Out = 1 - mapRange(p, 0.835, 0.875);
+        const s3Opacity = Math.min(s3In, s3Out);
+        el.s3.style.opacity = s3Opacity.toFixed(3);
+        el.s3.style.pointerEvents = s3Opacity > 0.5 ? 'auto' : 'none';
+
+        if (s3Opacity > 0.005) {
+          const s3Prog = mapRange(p, 0.63, 0.87);
+          const liftY = (1 - easeOutCubic(s3In)) * 34;
+          el.s3.style.transform = `translateY(${liftY.toFixed(1)}px)`;
+          // Subtle camera pan across the geometric prism table grid
+          el.s3Cam.style.transform = `translate(${(-30 + s3Prog * 60).toFixed(1)}px, ${(18 - s3Prog * 36).toFixed(1)}px)`;
+        }
+
+        /* -----------------------------------------------------------------
+           SCENE 4: THE FINALE & EXPORT (0.85 -> 1.00)
+           ----------------------------------------------------------------- */
+        const s4In = mapRange(p, 0.855, 0.91);
+        el.s4.style.opacity = s4In.toFixed(3);
+        el.s4.style.pointerEvents = s4In > 0.5 ? 'auto' : 'none';
+        if (s4In > 0.005) {
+          const s4Lift = (1 - easeOutCubic(s4In)) * 36;
+          el.s4.style.transform = `translateY(${s4Lift.toFixed(1)}px)`;
+        }
+      }
+
+      /* -------------------------------------------------------------------
+         7. SMOOTH LERP SCROLL ENGINE & WATCH AUTO-PLAY LOOP
+         ------------------------------------------------------------------- */
+      function getMaxScroll() {
+        return Math.max(1, el.scrollTrack.offsetHeight - window.innerHeight);
+      }
+
+      function scrollToProgress(progress, instant = false) {
+        const y = clamp(progress, 0, 1) * getMaxScroll();
+        window.scrollTo({
+          top: y,
+          behavior: instant ? 'auto' : 'smooth',
+        });
+      }
+
+      function startWatch() {
+        if (isReadMode || isDrawerOpen || isModalOpen) return;
+        // If already near the end, rewind to top first
+        if (targetProgress > 0.96) {
+          scrollToProgress(0, true);
+          displayProgress = 0;
+          targetProgress = 0;
+        }
+        isWatching = true;
+        el.hudWatchText.textContent = 'watching · pause';
+        el.hudWatchDot.classList.remove('bg-alabaster/60');
+        el.hudWatchDot.classList.add('bg-prismRose', 'animate-pulse');
+        el.hudWatchBtn.classList.add('border-prismRose/60');
+      }
+
+      function stopWatch() {
+        if (!isWatching) return;
+        isWatching = false;
+        el.hudWatchText.textContent = 'watch';
+        el.hudWatchDot.classList.add('bg-alabaster/60');
+        el.hudWatchDot.classList.remove('bg-prismRose', 'animate-pulse');
+        el.hudWatchBtn.classList.remove('border-prismRose/60');
+      }
+
+      function toggleWatch() {
+        if (isWatching) stopWatch();
+        else startWatch();
+      }
+
+      let lastTime = performance.now();
+      function animationLoop(now) {
+        const dt = Math.min((now - lastTime) / 1000, 0.05);
+        lastTime = now;
+
+        const maxScroll = getMaxScroll();
+
+        // Hands-free cinema playback (~40 seconds full reel)
+        if (isWatching && !isReadMode && !isDrawerOpen && !isModalOpen) {
+          const speed = 1 / 40; // full film in 40s
+          const nextProg = clamp(targetProgress + speed * dt, 0, 1);
+          window.scrollTo(0, nextProg * maxScroll);
+          targetProgress = nextProg;
+          if (nextProg >= 0.999) {
+            stopWatch();
+            showToast('End of reel — Private Parts');
+          }
+        } else {
+          targetProgress = clamp(window.scrollY / maxScroll, 0, 1);
+        }
+
+        // Smooth Lerp Interpolation (No jitter, buttery scrubbing)
+        const lerpFactor = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 1 : 0.095;
+        displayProgress += (targetProgress - displayProgress) * lerpFactor;
+        if (Math.abs(targetProgress - displayProgress) < 0.0001) {
+          displayProgress = targetProgress;
+        }
+
+        renderChoreography(displayProgress);
+        requestAnimationFrame(animationLoop);
+      }
+
+      /* -------------------------------------------------------------------
+         8. MODALS, DRAWERS, PLAIN-TEXT MODE & EXPORT ACTIONS
+         ------------------------------------------------------------------- */
+      function openReadMode() {
+        stopWatch();
+        closeDrawer();
+        closeReaderModal();
+        isReadMode = true;
+        renderPlainTextArticle();
+        el.readOverlay.classList.remove('hidden');
+        el.body.classList.add('overflow-hidden');
+      }
+
+      function closeReadMode() {
+        isReadMode = false;
+        el.readOverlay.classList.add('hidden');
+        el.body.classList.remove('overflow-hidden');
+      }
+
+      function openDrawer(defaultTab = 'chapters') {
+        stopWatch();
+        closeReaderModal();
+        isDrawerOpen = true;
+        renderDrawerContent();
+        switchDrawerTab(defaultTab);
+        el.indexDrawer.classList.remove('hidden');
+        requestAnimationFrame(() => {
+          el.indexDrawer.classList.remove('opacity-0');
+        });
+        el.body.classList.add('overflow-hidden');
+      }
+
+      function closeDrawer() {
+        if (!isDrawerOpen) return;
+        isDrawerOpen = false;
+        el.indexDrawer.classList.add('opacity-0');
+        setTimeout(() => {
+          el.indexDrawer.classList.add('hidden');
+        }, 260);
+        if (!isReadMode && !isModalOpen) {
+          el.body.classList.remove('overflow-hidden');
+        }
+      }
+
+      function switchDrawerTab(tab) {
+        if (tab === 'creator') {
+          el.panelChapters.classList.add('hidden');
+          el.panelCreator.classList.remove('hidden');
+          el.tabCreatorBtn.className = 'px-4 py-2 rounded-full font-mono text-xs tracking-wider uppercase bg-alabaster text-obsidian transition';
+          el.tabChaptersBtn.className = 'px-4 py-2 rounded-full font-mono text-xs tracking-wider uppercase bg-white/10 text-alabaster hover:bg-white/15 transition';
+        } else {
+          el.panelCreator.classList.add('hidden');
+          el.panelChapters.classList.remove('hidden');
+          el.tabChaptersBtn.className = 'px-4 py-2 rounded-full font-mono text-xs tracking-wider uppercase bg-alabaster text-obsidian transition';
+          el.tabCreatorBtn.className = 'px-4 py-2 rounded-full font-mono text-xs tracking-wider uppercase bg-white/10 text-alabaster hover:bg-white/15 transition';
+        }
+      }
+
+      function openReaderModal(index) {
+        stopWatch();
+        if (!appState.entries.length) return;
+        currentModalEntryIndex = (index + appState.entries.length) % appState.entries.length;
+        const entry = appState.entries[currentModalEntryIndex];
+        const tier = getTier(entry.heat);
+
+        el.modalNum.textContent = `ENTRY ${entry.num} · ${appState.title.toUpperCase()}`;
+        el.modalTitle.textContent = entry.title;
+        el.modalExcerpt.textContent = entry.excerpt;
+        el.modalReadTime.textContent = entry.readTime;
+        el.modalHeatBadge.textContent = `${tier.code} · ${tier.name}`;
+        el.modalHeatBadge.style.color = tier.color;
+        el.modalHeatBadge.style.borderColor = `${tier.color}66`;
+        el.modalAccentBar.style.background = tier.color;
+        el.modalBody.innerHTML = entry.body.map(p => `<p>${escapeHtml(p)}</p>`).join('');
+
+        isModalOpen = true;
+        el.readerModal.classList.remove('hidden');
+        el.readerModal.classList.add('flex');
+        el.body.classList.add('overflow-hidden');
+      }
+
+      function closeReaderModal() {
+        if (!isModalOpen) return;
+        isModalOpen = false;
+        el.readerModal.classList.add('hidden');
+        el.readerModal.classList.remove('flex');
+        if (!isReadMode && !isDrawerOpen) {
+          el.body.classList.remove('overflow-hidden');
+        }
+      }
+
+      function downloadMarkdownFile() {
+        try {
+          const md = generateMarkdownString();
+          const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = getFilename();
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+          showToast(`Downloaded ${getFilename()}`);
+        } catch (err) {
+          showToast('Download blocked by browser — try Copy MD');
+        }
+      }
+
+      function copyMarkdownToClipboard() {
+        const md = generateMarkdownString();
+        const ta = document.createElement('textarea');
+        ta.value = md;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try {
+          document.execCommand('copy');
+          showToast(`Copied ${getFilename()} to clipboard`);
+        } catch (err) {
+          showToast('Could not copy automatically');
+        }
+        document.body.removeChild(ta);
+      }
+
+      /* -------------------------------------------------------------------
+         9. EVENT LISTENERS & INTERACTIONS
+         ------------------------------------------------------------------- */
+      function bindEvents() {
+        // Yield Watch control immediately on manual scroll intent
+        window.addEventListener('wheel', stopWatch, { passive: true });
+        window.addEventListener('touchstart', stopWatch, { passive: true });
+
+        // Subtle Mouse Parallax for Optical Prism & HUD Eye
+        window.addEventListener('pointermove', (e) => {
+          pointerX = (e.clientX / window.innerWidth - 0.5) * 2;
+          pointerY = (e.clientY / window.innerHeight - 0.5) * 2;
+        }, { passive: true });
+
+        // HUD Controls
+        el.hudHomeBtn.addEventListener('click', () => {
+          stopWatch();
+          closeReadMode();
+          closeDrawer();
+          closeReaderModal();
+          scrollToProgress(0);
+        });
+        el.hudFileBtn.addEventListener('click', openReadMode);
+        el.hudHeatBtn.addEventListener('click', () => {
+          stopWatch();
+          scrollToProgress(0.49);
+        });
+        el.hudWatchBtn.addEventListener('click', toggleWatch);
+        el.hudIndexBtn.addEventListener('click', () => openDrawer('chapters'));
+
+        // Skip Link opens Plain-Text Reader cleanly
+        el.skipToRead.addEventListener('click', (e) => {
+          e.preventDefault();
+          openReadMode();
+        });
+
+        // Stage Archive Filter Pills
+        el.s3Filters.querySelectorAll('[data-heat-filter]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            activeStageFilter = btn.getAttribute('data-heat-filter');
+            el.s3Filters.querySelectorAll('[data-heat-filter]').forEach(b => {
+              const active = b === btn;
+              b.className = active
+                ? 'filter-pill px-3 py-1.5 rounded-full font-mono text-[10px] sm:text-[11px] tracking-wider uppercase border transition-all bg-alabaster text-obsidian border-alabaster'
+                : 'filter-pill px-3 py-1.5 rounded-full font-mono text-[10px] sm:text-[11px] tracking-wider uppercase border transition-all bg-darkroom/80 text-stoneMuted border-white/15 hover:border-white/40 hover:text-alabaster';
+            });
+            renderStageArchiveCards();
+          });
+        });
+
+        // Drawer Archive Filter Pills
+        el.drawerFilters.querySelectorAll('[data-drawer-filter]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            activeDrawerFilter = btn.getAttribute('data-drawer-filter');
+            el.drawerFilters.querySelectorAll('[data-drawer-filter]').forEach(b => {
+              const active = b === btn;
+              b.className = active
+                ? 'px-3 py-1 rounded-full font-mono text-[10px] uppercase tracking-wider bg-alabaster text-obsidian'
+                : 'px-3 py-1 rounded-full font-mono text-[10px] uppercase tracking-wider bg-white/10 text-stoneMuted hover:text-alabaster';
+            });
+            renderDrawerContent();
+          });
+        });
+
+        // Finale Scene Actions
+        el.finReadBtn.addEventListener('click', openReadMode);
+        el.finDownloadBtn.addEventListener('click', downloadMarkdownFile);
+        el.finCreatorBtn.addEventListener('click', () => openDrawer('creator'));
+        el.finReplayBtn.addEventListener('click', () => {
+          scrollToProgress(0, true);
+          displayProgress = 0;
+          targetProgress = 0;
+          setTimeout(startWatch, 220);
+        });
+
+        // Plain-Text Read Overlay Controls
+        el.readCloseBtn.addEventListener('click', closeReadMode);
+        el.readDownloadBtn.addEventListener('click', downloadMarkdownFile);
+        el.readCopyBtn.addEventListener('click', copyMarkdownToClipboard);
+
+        // Index Drawer Controls
+        el.indexCloseBtn.addEventListener('click', closeDrawer);
+        el.tabChaptersBtn.addEventListener('click', () => switchDrawerTab('chapters'));
+        el.tabCreatorBtn.addEventListener('click', () => switchDrawerTab('creator'));
+        el.drawerReadBtn.addEventListener('click', openReadMode);
+        el.drawerDownloadBtn.addEventListener('click', downloadMarkdownFile);
+
+        // Reader Sheet Modal Controls
+        el.modalCloseBtn.addEventListener('click', closeReaderModal);
+        el.modalPrevBtn.addEventListener('click', () => openReaderModal(currentModalEntryIndex - 1));
+        el.modalNextBtn.addEventListener('click', () => openReaderModal(currentModalEntryIndex + 1));
+        el.readerModal.addEventListener('click', (e) => {
+          if (e.target === el.readerModal) closeReaderModal();
+        });
+
+        // Zero-Code Creator Mode Actions
+        el.creatorSaveMetaBtn.addEventListener('click', () => {
+          const newTitle = el.edTitle.value.trim();
+          const newAuthor = el.edAuthor.value.trim();
+          if (newTitle) appState.title = newTitle;
+          if (newAuthor) appState.author = newAuthor;
+          appState.quotes = [
+            el.edQ1.value.trim() || DEFAULT_STATE.quotes[0],
+            el.edQ2.value.trim() || DEFAULT_STATE.quotes[1],
+            el.edQ3.value.trim() || DEFAULT_STATE.quotes[2],
+          ];
+          saveState();
+          refreshAllViews();
+          showToast('Identity & opening lines updated live');
+        });
+
+        el.creatorAddEntryBtn.addEventListener('click', () => {
+          const title = el.newEntryTitle.value.trim();
+          const excerpt = el.newEntryExcerpt.value.trim();
+          const rawBody = el.newEntryBody.value.trim();
+          const heat = clamp(parseInt(el.newEntryHeat.value, 10) || 3, 1, 5);
+
+          if (!title || !rawBody) {
+            showToast('Please enter at least a Title and Entry Text');
+            return;
+          }
+
+          const paragraphs = rawBody.split(/\n\s*\n/).map(p => p.trim()).filter(Boolean);
+          const wordCount = rawBody.split(/\s+/).length;
+          const mins = Math.max(1, Math.round(wordCount / 180));
+          const num = String(appState.entries.length + 1).padStart(2, '0');
+
+          appState.entries.push({
+            id: `entry-${Date.now()}`,
+            num,
+            title,
+            heat,
+            readTime: `${mins} min read`,
+            excerpt: excerpt || paragraphs[0].slice(0, 110) + '…',
+            body: paragraphs,
+          });
+
+          saveState();
+          refreshAllViews();
+
+          // Clear fields & jump user to Scene 3 to admire their new entry
+          el.newEntryTitle.value = '';
+          el.newEntryExcerpt.value = '';
+          el.newEntryBody.value = '';
+          closeDrawer();
+          scrollToProgress(0.74);
+          showToast(`Published "${title}" (${getTier(heat).code})`);
+        });
+
+        el.creatorResetBtn.addEventListener('click', () => {
+          appState = JSON.parse(JSON.stringify(DEFAULT_STATE));
+          saveState();
+          refreshAllViews();
+          showToast('Restored default Private Parts copy');
+        });
+
+        // Keyboard Navigation (Space = Watch, Arrows = Scroll, Esc = Close)
+        window.addEventListener('keydown', (e) => {
+          const tag = (e.target && e.target.tagName) || '';
+          const isTyping = tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT';
+
+          if (e.key === 'Escape') {
+            if (isModalOpen) closeReaderModal();
+            else if (isDrawerOpen) closeDrawer();
+            else if (isReadMode) closeReadMode();
+            return;
+          }
+
+          if (isTyping || isReadMode || isDrawerOpen || isModalOpen) return;
+
+          if (e.code === 'Space') {
+            e.preventDefault();
+            toggleWatch();
+          } else if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            stopWatch();
+            window.scrollBy({ top: window.innerHeight * 0.45, behavior: 'smooth' });
+          } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            stopWatch();
+            window.scrollBy({ top: -window.innerHeight * 0.45, behavior: 'smooth' });
+          }
+        });
+      }
+
+      /* -------------------------------------------------------------------
+         10. INITIALIZATION (Zero-FOUC Reveal + Reduced Motion Check)
+         ------------------------------------------------------------------- */
+      function init() {
+        renderHeatTierPills();
+        refreshAllViews();
+        bindEvents();
+
+        // Initial frame render before revealing stage
+        renderChoreography(0);
+        requestAnimationFrame(animationLoop);
+
+        // Smooth Darkroom Preloader Fade-Out
+        window.addEventListener('load', revealStage);
+        setTimeout(revealStage, 550);
+      }
+
+      let revealed = false;
+      function revealStage() {
+        if (revealed) return;
+        revealed = true;
+        el.body.classList.remove('is-loading');
+        el.preloader.classList.add('opacity-0');
+        setTimeout(() => {
+          el.preloader.style.display = 'none';
+        }, 720);
+      }
+
+      init();
+    })();
+  </script>
+</body>
+</html>

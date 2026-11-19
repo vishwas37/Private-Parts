@@ -1,0 +1,134 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-serif: "Cormorant Garamond", Georgia, serif;
+  --font-sans: "DM Sans", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --color-obsidian: #110f12;
+  --color-darkroom: #1a161c;
+  --color-alabaster: #f4efe6;
+  --color-stone-muted: #9e96a3;
+  --color-prism-cyan: #38bdf8;
+  --color-prism-violet: #a855f7;
+  --color-prism-rose: #f43f5e;
+  --color-prism-vermilion: #fc4109;
+  --color-prism-amber: #f59e0b;
+}
+
+:root {
+  --prism-gradient: linear-gradient(90deg, #38bdf8 0%, #a855f7 26%, #f43f5e 52%, #fc4109 76%, #f59e0b 100%);
+  color-scheme: dark;
+}
+
+html,
+body {
+  background-color: #110f12;
+  color: #f4efe6;
+  overscroll-behavior-y: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Subtle Animated SVG Film Grain Overlay */
+.film-grain {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+  animation: grainShift 0.6s steps(4) infinite;
+}
+
+@keyframes grainShift {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-1.5%, 1%); }
+  50% { transform: translate(1%, -1.5%); }
+  75% { transform: translate(-1%, -1%); }
+  100% { transform: translate(0, 0); }
+}
+
+/* Prismatic Text & Hairline Helpers */
+.prism-text {
+  background: var(--prism-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.prism-bar {
+  background: var(--prism-gradient);
+}
+
+.prism-diamond-flow {
+  background: var(--prism-gradient);
+  background-size: 200% 200%;
+  animation: prismFlow 3.5s ease infinite;
+}
+
+@keyframes prismFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Scroll Cue Line Drop */
+@keyframes scrollDrop {
+  0% { transform: scaleY(0); transform-origin: top; opacity: 0; }
+  35% { transform: scaleY(1); transform-origin: top; opacity: 1; }
+  70% { transform: scaleY(1); transform-origin: bottom; opacity: 1; }
+  100% { transform: scaleY(0); transform-origin: bottom; opacity: 0; }
+}
+
+.scroll-line-anim {
+  animation: scrollDrop 2.2s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+/* Perspective darkroom floor grid */
+.darkroom-floor-grid {
+  background-image:
+    linear-gradient(to right, rgba(244, 239, 230, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(244, 239, 230, 0.06) 1px, transparent 1px);
+  background-size: 64px 42px;
+  transform: perspective(420px) rotateX(62deg);
+  transform-origin: top center;
+}
+
+/* Custom Dark Scrollbar for Modals & Read Mode */
+.custom-scroll::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom-scroll::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.custom-scroll::-webkit-scrollbar-thumb {
+  background: rgba(244, 239, 230, 0.18);
+  border-radius: 999px;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(244, 239, 230, 0.35);
+}
+
+/* Subtle slim page scrollbar in cinema mode */
+body::-webkit-scrollbar {
+  width: 4px;
+}
+
+body::-webkit-scrollbar-track {
+  background: #110f12;
+}
+
+body::-webkit-scrollbar-thumb {
+  background: rgba(244, 239, 230, 0.14);
+  border-radius: 999px;
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .film-grain,
+  .scroll-line-anim,
+  .prism-diamond-flow {
+    animation: none !important;
+  }
+}

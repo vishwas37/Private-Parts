@@ -1,0 +1,8 @@
+{
+  "name": "PRIVATE PARTS — Ravenclaw",
+  "description": "A prism for the things said after midnight. An interactive scrollytelling film & archive refracted by Ravenclaw.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
